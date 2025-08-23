@@ -1,4 +1,10 @@
 import * as THREE from 'three';
+import nx from "./textures/environment/nx.png";
+import ny from "./textures/environment/ny.png";
+import nz from "./textures/environment/nz.png";
+import px from "./textures/environment/px.png";
+import py from "./textures/environment/py.png";
+import pz from "./textures/environment/pz.png";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { TextureMap, PlanetryObject } from './constants';
 
@@ -46,6 +52,9 @@ export class PlanetViewer {
     key.position.set(5, 3, 5);
     this.scene.add(ambient, key);
 
+    // Background
+    this.createEnviorment();
+
     // Resize handling
     const onResize = () => {
       const { clientWidth: w, clientHeight: h } = host;
@@ -55,6 +64,12 @@ export class PlanetViewer {
     };
     const ro = new ResizeObserver(onResize);
     ro.observe(host);
+  }
+
+  createEnviorment() {
+    const loader = new THREE.CubeTextureLoader();
+    const texture = loader.load([px, nx, py, ny, pz, nz]);
+    this.scene.background = texture;
   }
 
   createRingMesh (texture: THREE.Texture): THREE.Mesh {
