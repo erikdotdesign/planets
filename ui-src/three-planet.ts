@@ -13,7 +13,8 @@ export type PlanetOptions = {
   textures: TextureMap;
   radius?: number; // in Three units
   rotationSpeed?: number; // radians per second
-  background?: string; // CSS color
+  background?: boolean;
+  controls?: boolean;
 };
 
 export class PlanetViewer {
@@ -28,23 +29,24 @@ export class PlanetViewer {
   private controls?: OrbitControls;
   private rotationSpeed = 0.5;
 
-  constructor(private host: HTMLElement) {
+  constructor(private host: HTMLElement, background: boolean = true, controls: boolean = true) {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setSize(host.clientWidth, host.clientHeight, false);
     host.appendChild(this.renderer.domElement);
 
     this.camera.position.set(0, 0, 2.2);
-    this.camera.position.z = 3;
     this.camera.position.set(0, 5, 5);
     this.camera.lookAt(0, 0, 0);
 
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.enableDamping = true;   // smooth motion
-    this.controls.dampingFactor = 0.1;
-    this.controls.enablePan = false;      // optional: disable panning
-    this.controls.enableZoom = true;      // allow scroll wheel zoom
-    this.controls.minDistance = 1.5;      // min zoom (closer)
-    this.controls.maxDistance = 10;       // max zoom (farther)
+    if (controls) {
+      this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+      this.controls.enableDamping = true;   // smooth motion
+      this.controls.dampingFactor = 0.1;
+      this.controls.enablePan = false;      // optional: disable panning
+      this.controls.enableZoom = true;      // allow scroll wheel zoom
+      this.controls.minDistance = 1.5;      // min zoom (closer)
+      this.controls.maxDistance = 10;       // max zoom (farther)
+    }
 
     // Lights
     const ambient = new THREE.AmbientLight(0xffffff, 0.6);
@@ -52,8 +54,8 @@ export class PlanetViewer {
     key.position.set(5, 3, 5);
     this.scene.add(ambient, key);
 
-    // Background
-    this.createEnviorment();
+    // Environment
+    if (background) this.createEnvironment();
 
     // Resize handling
     const onResize = () => {
@@ -66,10 +68,11 @@ export class PlanetViewer {
     ro.observe(host);
   }
 
-  createEnviorment() {
+  createEnvironment() {
     const loader = new THREE.CubeTextureLoader();
     const texture = loader.load([px, nx, py, ny, pz, nz]);
     this.scene.background = texture;
+    this.environmentTexture = texture;
   }
 
   createRingMesh (texture: THREE.Texture): THREE.Mesh {
@@ -101,8 +104,6 @@ export class PlanetViewer {
 
   async setPlanet(opts: PlanetOptions) {
     const { type, textures, radius = 1, background, rotationSpeed } = opts;
-
-    if (background) this.host.style.background = background;
 
     const loader = new THREE.TextureLoader();
     const loadTex = (url?: string) =>
@@ -213,26 +214,4 @@ export class PlanetViewer {
   getCanvas(): HTMLCanvasElement {
     return this.renderer.domElement;
   }
-
-  // snapshot(width = 1200, height = 1200): Uint8Array {
-  //   const prevSize = this.renderer.getSize(new THREE.Vector2());
-  //   const prevPixelRatio = this.renderer.getPixelRatio();
-
-  //   this.renderer.setPixelRatio(1);
-  //   this.renderer.setSize(width, height, false);
-  //   this.renderer.render(this.scene, this.camera);
-
-  //   const dataURL = this.renderer.domElement.toDataURL('image/png');
-
-  //   // restore
-  //   this.renderer.setPixelRatio(prevPixelRatio);
-  //   this.renderer.setSize(prevSize.x, prevSize.y, false);
-
-  //   // Convert dataURL to bytes
-  //   const base64 = dataURL.split(',')[1];
-  //   const raw = atob(base64);
-  //   const bytes = new Uint8Array(raw.length);
-  //   for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
-  //   return bytes;
-  // }
 }

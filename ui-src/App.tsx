@@ -3,6 +3,7 @@ import { PLANETS } from "./constants";
 import { PlanetViewer } from './three-planet';
 import "./App.css";
 import Button from "./Button";
+import PlanetThumbnail from "./PlanetThumbnail";
 
 const App = () => {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
@@ -32,8 +33,8 @@ const App = () => {
 
   useEffect(() => {
     const v = viewerRef.current; if (!v) return;
-    const { type, textures, radius, bg } = PLANETS[planet];
-    v.setPlanet({ type, textures, radius, background: bg });
+    const { type, textures, radius } = PLANETS[planet];
+    v.setPlanet({ type, textures, radius });
   }, [planet]);
 
   useEffect(() => {
@@ -159,10 +160,13 @@ const App = () => {
             {
               Object.keys(PLANETS).map((k) => (
                 <Button
-                  modifier={[...(planet === k ? ["primary"] : [])]}
+                  modifier={[...(planet === k ? ["radio"] : []), "planet", k.toLowerCase()]}
                   key={k}
                   onClick={() => setPlanet(k)}>
-                  { k }
+                  <PlanetThumbnail
+                    type={PLANETS[k].type}
+                    textures={PLANETS[k].textures} />
+                  <span>{ k }</span>
                 </Button>
               ))
             }
@@ -172,6 +176,15 @@ const App = () => {
           ref={hostRef}
           className={`c-app__canvas ${recording ? "c-app__canvas--recording" : ""}`}
           id="three">
+          <div 
+            className="c-app__canvas-overlay c-app__canvas-overlay--recording"
+            style={{
+              display: recording ? "flex" : "none"
+            }}>
+            <div>
+              <span>{recordingTime}s</span>
+            </div>
+          </div>
           {/* {
             videoUrl
             ? <div className="c-app__canvas-overlay">
@@ -188,15 +201,6 @@ const App = () => {
               </div>
             : null
           } */}
-          {
-            recording
-            ? <div className="c-app__canvas-overlay c-app__canvas-overlay--recording">
-                <div>
-                  <span>{recordingTime}s</span>
-                </div>
-              </div>
-            : null
-          }
         </div>
         <div className="c-app__controls c-app__controls--right">
           <div className="c-app__control-group c-app__control-group--row c-app__control-group--fixed">

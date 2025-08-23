@@ -63,10 +63,10 @@
 }
 
 :root {
-  --font-family: "Josefin Sans", sans-serif;
-  --font-family-headline: "Josefin Sans", sans-serif;
+  --font-family: "Space Grotesk", sans-serif;
+  --font-family-headline: "Space Grotesk", sans-serif;
   --font-family-mono: "IBM Plex Mono", monospace;
-  --border-radius: 100px;
+  --border-radius: 0;
   --control-addon-size: 40px;
   --anim-params: 2.5s linear infinite alternate;
 }
