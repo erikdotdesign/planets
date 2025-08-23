@@ -17,6 +17,8 @@ export type PlanetOptions = {
   controls?: boolean;
 };
 
+export type LightMode = "sun" | "soft" | "neutral";
+
 export class PlanetViewer {
   private scene = new THREE.Scene();
   private camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
@@ -28,17 +30,42 @@ export class PlanetViewer {
   private ring?: THREE.Mesh;
   private controls?: OrbitControls;
   private rotationSpeed = 0.5;
+  private showEnvironment = true;
+  private ambientLight?: THREE.AmbientLight;
+  private keyLight?: THREE.DirectionalLight;
+  private pointLight?: THREE.PointLight;
 
-  constructor(private host: HTMLElement, background: boolean = true, controls: boolean = true) {
+  constructor(host: HTMLCanvasElement, {
+    headless = false, 
+    width = host.clientWidth,
+    height = host.clientHeight,
+    lightMode = "sun", 
+    environment = true, 
+    controls = true
+  }: {
+    headless?: boolean;
+    width?: number;
+    height?: number;
+    lightMode?: LightMode;
+    environment?: boolean;
+    controls?: boolean;
+  }) {
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: host,
+      antialias: true,
+      alpha: true,
+      preserveDrawingBuffer: true,
+    });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    this.renderer.setSize(host.clientWidth, host.clientHeight, false);
-    host.appendChild(this.renderer.domElement);
+    this.renderer.setSize(width, height, false);
 
-    this.camera.position.set(0, 0, 2.2);
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
+
     this.camera.position.set(0, 5, 5);
     this.camera.lookAt(0, 0, 0);
 
-    if (controls) {
+    if (controls && !headless) {
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
       this.controls.enableDamping = true;   // smooth motion
       this.controls.dampingFactor = 0.1;
@@ -49,30 +76,73 @@ export class PlanetViewer {
     }
 
     // Lights
-    const ambient = new THREE.AmbientLight(0xffffff, 0.6);
-    const key = new THREE.DirectionalLight(0xffffff, 1.0);
-    key.position.set(5, 3, 5);
-    this.scene.add(ambient, key);
+    // const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+    // const key = new THREE.DirectionalLight(0xffffff, 1.0);
+    // key.position.set(5, 3, 5);
+    // this.scene.add(ambient, key);
 
     // Environment
-    if (background) this.createEnvironment();
+    if (environment) this.createEnvironment();
+
+    this.setLighting(lightMode);
 
     // Resize handling
-    const onResize = () => {
-      const { clientWidth: w, clientHeight: h } = host;
-      this.camera.aspect = w / h;
-      this.camera.updateProjectionMatrix();
-      this.renderer.setSize(w, h, false);
-    };
-    const ro = new ResizeObserver(onResize);
-    ro.observe(host);
+    if (!headless) {
+      const onResize = () => {
+        const { clientWidth: w, clientHeight: h } = host;
+        this.camera.aspect = w / h;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(w, h, false);
+      };
+      const ro = new ResizeObserver(onResize);
+      ro.observe(host);
+    }
+  }
+
+  setLighting(mode: LightMode) {
+    // Remove previous lights
+    if (this.ambientLight) this.scene.remove(this.ambientLight);
+    if (this.keyLight) this.scene.remove(this.keyLight);
+    if (this.pointLight) this.scene.remove(this.pointLight);
+
+    switch(mode) {
+      case 'sun':
+        // Very low ambient
+        this.ambientLight = new THREE.AmbientLight(0xffffff, 0.05);
+
+        // Strong directional light (sun)
+        this.keyLight = new THREE.DirectionalLight(0xfff1e0, 3.0); // warm sunlight
+        this.keyLight.position.set(10, 5, 5);
+        this.keyLight.castShadow = true;
+        this.keyLight.shadow.mapSize.width = 2048;
+        this.keyLight.shadow.mapSize.height = 2048;
+        this.keyLight.shadow.bias = -0.0001;
+
+        this.scene.add(this.ambientLight, this.keyLight);
+        break;
+      case 'neutral':
+      default:
+        this.ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+        this.keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        this.keyLight.position.set(5, 3, 5);
+        this.scene.add(this.ambientLight, this.keyLight);
+        break;
+    }
   }
 
   createEnvironment() {
     const loader = new THREE.CubeTextureLoader();
     const texture = loader.load([px, nx, py, ny, pz, nz]);
     this.scene.background = texture;
-    this.environmentTexture = texture;
+  }
+
+  toggleEnvironment(showEnvironment: boolean) {
+    this.showEnvironment = showEnvironment;
+    if (showEnvironment) {
+      this.createEnvironment();
+    } else {
+      this.scene.background = null;
+    }
   }
 
   createRingMesh (texture: THREE.Texture): THREE.Mesh {
@@ -103,7 +173,7 @@ export class PlanetViewer {
   }
 
   async setPlanet(opts: PlanetOptions) {
-    const { type, textures, radius = 1, background, rotationSpeed } = opts;
+    const { type, textures, radius = 1 } = opts;
 
     const loader = new THREE.TextureLoader();
     const loadTex = (url?: string) =>
@@ -213,5 +283,15 @@ export class PlanetViewer {
 
   getCanvas(): HTMLCanvasElement {
     return this.renderer.domElement;
+  }
+
+  // New method for offscreen thumbnail capture
+  async renderOnce(): Promise<string> {
+    return new Promise((resolve) => {
+      requestAnimationFrame(() => {
+        this.renderer.render(this.scene, this.camera);
+        resolve(this.renderer.domElement.toDataURL("image/png"));
+      });
+    });
   }
 }

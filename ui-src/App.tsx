@@ -1,17 +1,19 @@
 import { useState, useRef, useReducer, useEffect } from "react";
+import { capitalize } from "./helpers";
 import { PLANETS } from "./constants";
-import { PlanetViewer } from './three-planet';
+import { LightMode, PlanetViewer } from './three-planet';
 import "./App.css";
 import Button from "./Button";
 import PlanetThumbnail from "./PlanetThumbnail";
+import Control from "./Control";
+import { generatePlanetThumbnails } from "./thumbnails";
 
 const App = () => {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [recording, setRecording] = useState<boolean>(false);
   const [recordingTime, setRecordingTime] = useState<number>(0);
-  const hostRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const viewerRef = useRef<PlanetViewer | null>(null);
-  let canvasRef = useRef<HTMLCanvasElement>(null);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const recordedChunksRef = useRef<BlobPart[]>([]);
@@ -19,15 +21,31 @@ const App = () => {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [planet, setPlanet] = useState<keyof typeof PLANETS>('Earth');
-  const [speed, setSpeed] = useState(0.2);
+  const [rotationSpeed, setRotationSpeed] = useState(0.2);
+  const [showEnvironment, setShowEnvironment] = useState(true);
+  const [lighting, setLighting] = useState<LightMode>("sun");
   const [playing, setPlaying] = useState(true);
 
+  const [thumbnails, setThumbnails] = useState(null);
+
   useEffect(() => {
-    if (!hostRef.current) return;
-    const viewer = new PlanetViewer(hostRef.current);
+    if (!canvasRef.current) return;
+    const viewer = new PlanetViewer(canvasRef.current, {
+      lightMode: lighting
+    });
     viewerRef.current = viewer;
-    canvasRef.current = viewer.getCanvas();
     viewer.startLoop();
+    generatePlanetThumbnails().then(previews => {
+      setThumbnails(previews);
+      // console.log(previews);
+      // previews.forEach(p => {
+      //   console.log(p.type, p.image);
+      //   // optionally create <img> elements to preview:
+      //   const img = document.createElement('img');
+      //   img.src = p.image;
+      //   document.body.appendChild(img);
+      // });
+    });
     return () => viewer.stopLoop();
   }, []);
 
@@ -40,11 +58,21 @@ const App = () => {
   useEffect(() => {
     if (!viewerRef.current) return;
     if (playing) {
-      viewerRef.current.setRotationSpeed(speed);
+      viewerRef.current.setRotationSpeed(rotationSpeed);
     } else {
       viewerRef.current.setRotationSpeed(0); // pause planet spin, but keep controls alive
     }
-  }, [playing, speed]);
+  }, [playing, rotationSpeed]);
+
+  useEffect(() => {
+    if (!viewerRef.current) return;
+    viewerRef.current.toggleEnvironment(showEnvironment);
+  }, [showEnvironment]);
+
+  useEffect(() => {
+    if (!viewerRef.current) return;
+    viewerRef.current.setLighting(lighting);
+  }, [lighting]);
 
   const startPlanetRecording = () => {
     if (!canvasRef.current) return;
@@ -163,9 +191,10 @@ const App = () => {
                   modifier={[...(planet === k ? ["radio"] : []), "planet", k.toLowerCase()]}
                   key={k}
                   onClick={() => setPlanet(k)}>
-                  <PlanetThumbnail
-                    type={PLANETS[k].type}
-                    textures={PLANETS[k].textures} />
+                  <div
+                    style={{
+                      backgroundImage: `url(${thumbnails && thumbnails.find((t) => t.name === k).image})`
+                    }}/>
                   <span>{ k }</span>
                 </Button>
               ))
@@ -173,7 +202,6 @@ const App = () => {
           </div>
         </div>
         <div 
-          ref={hostRef}
           className={`c-app__canvas ${recording ? "c-app__canvas--recording" : ""}`}
           id="three">
           <div 
@@ -185,6 +213,7 @@ const App = () => {
               <span>{recordingTime}s</span>
             </div>
           </div>
+          <canvas ref={canvasRef} />
           {/* {
             videoUrl
             ? <div className="c-app__canvas-overlay">
@@ -203,6 +232,39 @@ const App = () => {
           } */}
         </div>
         <div className="c-app__controls c-app__controls--right">
+          <div className="c-app__control-group">
+            <fieldset className="c-control-fieldset">
+            <legend className="c-control__label c-control__label--legend">
+              Lighting
+            </legend>
+            {
+              ["sun", "neutral"].map((l) => (
+                <Control
+                  label={capitalize(l)}
+                  type="radio"
+                  value={l}
+                  name="light-mode"
+                  checked={l === lighting}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                    setLighting(e.target.value as LightMode)
+                  } />
+              ))
+            }
+          </fieldset>
+            <Control
+              label="Rotation Speed"
+              type="range"
+              min={0.1}
+              max={1}
+              step={0.1}
+              value={rotationSpeed}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRotationSpeed(e.target.valueAsNumber)} />
+            <Control
+              label="Environment"
+              type="checkbox"
+              checked={showEnvironment}
+              onChange={() => setShowEnvironment(!showEnvironment)} />
+          </div>
           <div className="c-app__control-group c-app__control-group--row c-app__control-group--fixed">
             <Button
               modifier={["icon"]}
