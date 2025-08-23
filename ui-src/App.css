@@ -1,0 +1,220 @@
+.figma-light {
+  --color-primary: #1E1E1E;
+  --color-primary-hover: #121212;
+  --color-gray: #6E6E6E;
+  --color-gray-hover: #5A5A5A;
+  --color-bg-z0: #ffffff;
+  --color-bg-z1: #F7F7F7;
+  --color-bg-z2: #EFEFEF;
+  --color-bg-z3: #E6E6E6;
+  --color-border-z0: #EBEBEB;
+  --color-border-z1: #E3E3E3;
+  --color-border-z2: #DCDCDC;
+  --color-border-z3: #D4D4D4;
+  --color-border-glass: color-mix(in srgb, #000000 10%, transparent);
+  --color-blue: #0288D1;
+  --color-blue-hover: #026FA8;
+  --color-green: #2E7D32;
+  --color-green-hover: #256628;
+  --color-yellow: #ED6C02;
+  --color-yellow-hover: #C65A02;
+  --color-red: #D32F2F;
+  --color-red-hover: #AB2727;
+  --color-purple: #8E24AA;
+  --color-purple-hover: #691B7E;
+  --color-text-base: #000000;
+  --color-text-light: color-mix(in srgb, var(--color-text-base) 75%, transparent);
+  --color-text-lighter: color-mix(in srgb, var(--color-text-base) 50%, transparent);
+  --color-text-lightest: color-mix(in srgb, var(--color-text-base) 25%, transparent);
+  --color-text-base-on-primary: #FFFFFF;
+  --color-text-base-on-red: #FFFFFF;
+}
+
+.figma-dark {
+  --color-primary: #F7F7F7;
+  --color-primary-hover: #ffffff;
+  --color-gray: #B0B0B0;
+  --color-gray-hover: #C2C2C2;
+  --color-bg-z0: #121212;
+  --color-bg-z1: #1E1E1E;
+  --color-bg-z2: #2A2A2A;
+  --color-bg-z3: #363636;
+  --color-border-z0: #252525;
+  --color-border-z1: #303030;
+  --color-border-z2: #3B3B3B;
+  --color-border-z3: #464646;
+  --color-border-glass: color-mix(in srgb, #ffffff 10%, transparent);
+  --color-blue: #29B6F6;
+  --color-blue-hover: #4FC3F7;
+  --color-green: #66BB6A;
+  --color-green-hover: #81C784;
+  --color-yellow: #FFB74D;
+  --color-yellow-hover: #FFCC80;
+  --color-red: #EF5350;
+  --color-red-hover: #E57373;
+  --color-purple: #BA68C8;
+  --color-purple-hover: #CC8FD6;
+  --color-text-base: #ffffff;
+  --color-text-light: color-mix(in srgb, var(--color-text-base) 75%, transparent);
+  --color-text-lighter: color-mix(in srgb, var(--color-text-base) 50%, transparent);
+  --color-text-lightest: color-mix(in srgb, var(--color-text-base) 25%, transparent);
+  --color-text-base-on-primary: #000000;
+  --color-text-base-on-red: #FFFFFF;
+}
+
+:root {
+  --font-family: "Josefin Sans", sans-serif;
+  --font-family-headline: "Josefin Sans", sans-serif;
+  --font-family-mono: "IBM Plex Mono", monospace;
+  --border-radius: 100px;
+  --control-addon-size: 40px;
+  --anim-params: 2.5s linear infinite alternate;
+}
+
+@keyframes rotateAnim {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.c-app {
+  height: 100vh;
+  width: 100vw;
+  overflow: scroll;
+  background: var(--color-bg-z0);
+}
+
+.c-app__body {
+  display: flex;
+  flex-direction: row;
+  padding: 32px 0px;
+  height: 100vh;
+  width: 100vw;
+  max-height: 100vh;
+  max-width: 100vw;
+}
+
+.c-app__controls {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  max-height: 100vh;
+  padding: 0 24px;
+  gap: 24px;
+  min-width: 0;
+  flex-shrink: 2;
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  &.c-app__controls--right {
+    max-width: 216px;
+  }
+}
+
+.c-app__control-group {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 24px;
+
+  &.c-app__control-group--row {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
+
+    > .c-app__control-group:not(.c-app__control-group--row) {
+      width: auto;
+      gap: 8px;
+      display: flex;
+      flex-direction: row;
+    }
+  }
+
+  &.c-app__control-group--fixed {
+    position: sticky;
+    bottom: 0; /* or whatever offset */
+    background: var(--color-bg-z0); /* usually helps keep it visible */
+    z-index: 10;
+    padding-top: 24px;
+    box-shadow: 0 1px 0 0 inset var(--color-border-z2);
+  }
+
+  .c-control {
+    &.c-control--color {
+      padding-top: 0;
+    }
+  }
+}
+
+.c-app__canvas {
+  position: relative;
+  flex: 2; /* or 2 if you want it bigger */
+  min-width: 0; /* important to allow flex shrinking */
+  min-height: 0; 
+  height: auto;
+  aspect-ratio: 1/1;
+
+  &.c-app__canvas--recording {
+    box-shadow: 0 0 0 3px var(--color-bg-z0), 0 0 0 4px var(--color-red);
+  }
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.c-app__canvas-overlay {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  &.c-app__canvas-overlay--recording {
+    align-items: start;
+    justify-content: start;
+    padding: 12px;
+
+    div {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 24px;
+      background: color-mix(in srgb, var(--color-bg-z0) 90%, transparent);
+      gap: 12px;
+      border-radius: 48px;
+      box-shadow: 0 0 0 1px inset var(--color-red);
+
+      &:before {
+        content: "";
+        display: block;
+        background: var(--color-red);
+        width: 12px;
+        height: 12px;
+        border-radius: 100%;
+      }
+
+      span {
+        width: 24px;
+        font-size: 16px;
+        line-height: 16px;
+        text-align: center;
+        font-family: var(--font-family);
+        color: var(--color-text-base);
+      }
+    }
+  }
+}
+
+.h-pointer {
+  cursor: pointer;
+}
