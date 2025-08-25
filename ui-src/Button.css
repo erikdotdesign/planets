@@ -64,7 +64,7 @@
   &.c-button--radio {
     color: var(--color-text-base);
     font-weight: bold;
-    box-shadow: 0 0 0 1px inset var(--color-border-z2) !important;
+    box-shadow: 0 0 0 1px inset var(--color-border-z3) !important;
     z-index: 2;
     background: var(--color-bg-z1);
 
@@ -166,7 +166,6 @@
   width: 1px;
   height: 1px;
   overflow: visible;
-  background: var(--color-bg-z0);
 
   &:before,
   &:after {
