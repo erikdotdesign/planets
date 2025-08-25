@@ -204,7 +204,7 @@ const App = () => {
           </div>
         </div>
         <div 
-          className={`c-app__canvas ${recording ? "c-app__canvas--recording" : ""}`}
+          className="c-app__canvas"
           id="three">
           <div 
             className="c-app__canvas-overlay c-app__canvas-overlay--recording"
@@ -280,7 +280,7 @@ const App = () => {
           </div>
           <div className="c-app__control-group c-app__control-group--row c-app__control-group--fixed">
             <Button
-              modifier={["icon"]}
+              modifier={["icon", "circle"]}
               onClick={() => setPlaying(!playing)}>
               {
                 playing
@@ -289,7 +289,7 @@ const App = () => {
               }
             </Button>
             <Button
-              modifier={["primary", "icon", ...[recording ? "red" : []] as string[]]}
+              modifier={["primary", "icon", "circle", ...[recording ? "red" : []] as string[]]}
               onClick={handleAddPlanet}>
               {
                 recording

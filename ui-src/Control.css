@@ -58,21 +58,21 @@
       }
     }
   }
-  
-  .c-control-fieldset__rule {
-    position: absolute;
-    width: calc(100% - 24px);
-    height: 2px;
-    left: 12px;
-    background: var(--color-bg-z0);
+}
 
-    &.c-control-fieldset__rule--top {
-      top: 0;
-    }
+.c-control-fieldset__rule {
+  position: absolute;
+  width: calc(100% - 24px);
+  height: 2px;
+  left: 12px;
+  background: var(--color-bg-z0);
 
-    &.c-control-fieldset__rule--bottom {
-      bottom: 0;
-    }
+  &.c-control-fieldset__rule--top {
+    top: 0;
+  }
+
+  &.c-control-fieldset__rule--bottom {
+    bottom: 0;
   }
 }
 

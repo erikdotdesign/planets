@@ -227,7 +227,7 @@ export class PlanetViewer {
       mat = new THREE.MeshPhongMaterial({
         map: baseTex,
         bumpMap: bumpTex,
-        bumpScale: bumpTex ? 0.05 : 0,
+        bumpScale: bumpTex ? 5 : 0,
         specularMap: specTex,
         shininess: specTex ? 30 : 0
       });

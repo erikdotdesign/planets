@@ -150,10 +150,6 @@
   height: auto;
   aspect-ratio: 1/1;
 
-  &.c-app__canvas--recording {
-    box-shadow: 0 0 0 3px var(--color-bg-z0), 0 0 0 4px var(--color-red);
-  }
-
   canvas {
     width: 100% !important;
     height: 100% !important;
@@ -171,7 +167,8 @@
   &.c-app__canvas-overlay--recording {
     align-items: start;
     justify-content: start;
-    padding: 12px;
+    padding: 24px;
+    box-shadow: 0 0 0 1px inset var(--color-red);
 
     div {
       position: relative;
