@@ -12,6 +12,7 @@
 }
 
 .c-button {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,19 +102,45 @@
     padding: 12px 16px;
     min-width: 136px;
 
-    div {
-      position: relative;
-      width: 32px;
-      height: 32px;
-      background-size: 64px 64px;
-      background-position: -16px -16px;
+    &:hover {
+      box-shadow: 0 0 0 1px inset var(--color-border-z2);
+      background: none;
     }
   }
 
-  &.c-button--saturn {
-    div {
-      background-size: 32px 32px;
-      background-position: initial;
+  &.c-button--rule {
+    .c-button__rule {
+      display: block;
     }
-  } 
+  }
+}
+
+.c-button__planet {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  background-size: 64px 64px;
+  background-position: -16px -16px;
+
+  &.c-button__planet--saturn {
+    background-size: 32px 32px;
+    background-position: initial;
+  }
+}
+
+.c-button__rule {
+  display: none;
+  position: absolute;
+  width: calc(100% - 24px);
+  height: 2px;
+  left: 12px;
+  background: var(--color-bg-z0);
+
+  &.c-button__rule--top {
+    top: 0;
+  }
+
+  &.c-button__rule--bottom {
+    bottom: 0;
+  }
 }

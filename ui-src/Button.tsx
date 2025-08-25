@@ -18,7 +18,9 @@ const Button = ({
     <button
       className={`c-button ${modifierClasses}`}
       {...props}>
+      <div className='c-button__rule c-button__rule--top' />
       {children}
+      <div className='c-button__rule c-button__rule--bottom' />
     </button>
   )
 }

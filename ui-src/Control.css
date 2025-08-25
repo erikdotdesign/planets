@@ -32,10 +32,6 @@
     box-shadow: 0 0 0 1px inset var(--color-border-z3);
   }
 
-  &.c-control-fieldset--room {
-    padding-top: 20px;
-  }
-
   .c-control {
     width: 100%;
 
@@ -54,6 +50,28 @@
       box-shadow: none !important;
       padding: 4px 8px 4px 12px;
       cursor: pointer;
+    }
+
+    &:nth-of-type(1) {
+      &:not(.c-control--radio, .c-control--checkbox) {
+        margin-top: 6px;
+      }
+    }
+  }
+  
+  .c-control-fieldset__rule {
+    position: absolute;
+    width: calc(100% - 24px);
+    height: 2px;
+    left: 12px;
+    background: var(--color-bg-z0);
+
+    &.c-control-fieldset__rule--top {
+      top: 0;
+    }
+
+    &.c-control-fieldset__rule--bottom {
+      bottom: 0;
     }
   }
 }
@@ -319,6 +337,7 @@
 
   &.c-control__label--legend {
     top: -7px;
+    text-transform: uppercase;
   }
   
   &::selection {

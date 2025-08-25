@@ -6,6 +6,7 @@ import "./App.css";
 import Button from "./Button";
 import PlanetThumbnail from "./PlanetThumbnail";
 import Control from "./Control";
+import FieldSet from "./FieldSet";
 import { generatePlanetThumbnails } from "./thumbnails";
 
 const App = () => {
@@ -188,10 +189,11 @@ const App = () => {
             {
               Object.keys(PLANETS).map((k) => (
                 <Button
-                  modifier={[...(planet === k ? ["radio"] : []), "planet", k.toLowerCase()]}
+                  modifier={[...(planet === k ? ["radio"] : []), "planet", "rule"]}
                   key={k}
                   onClick={() => setPlanet(k)}>
                   <div
+                    className={`c-button__planet c-button__planet--${k.toLowerCase()}`}
                     style={{
                       backgroundImage: `url(${thumbnails && thumbnails.find((t) => t.name === k).image})`
                     }}/>
@@ -233,37 +235,48 @@ const App = () => {
         </div>
         <div className="c-app__controls c-app__controls--right">
           <div className="c-app__control-group">
-            <fieldset className="c-control-fieldset">
-            <legend className="c-control__label c-control__label--legend">
-              Lighting
-            </legend>
-            {
-              ["sun", "neutral"].map((l) => (
-                <Control
-                  label={capitalize(l)}
-                  type="radio"
-                  value={l}
-                  name="light-mode"
-                  checked={l === lighting}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                    setLighting(e.target.value as LightMode)
-                  } />
-              ))
-            }
-          </fieldset>
-            <Control
-              label="Rotation Speed"
-              type="range"
-              min={0.1}
-              max={1}
-              step={0.1}
-              value={rotationSpeed}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRotationSpeed(e.target.valueAsNumber)} />
-            <Control
-              label="Environment"
-              type="checkbox"
-              checked={showEnvironment}
-              onChange={() => setShowEnvironment(!showEnvironment)} />
+            <FieldSet label="Lighting">
+              {
+                ["sun", "neutral"].map((l) => (
+                  <Control
+                    label={capitalize(l)}
+                    type="radio"
+                    value={l}
+                    name="light-mode"
+                    checked={l === lighting}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                      setLighting(e.target.value as LightMode)
+                    } />
+                ))
+              }
+            </FieldSet>
+            <FieldSet label="Rotation">
+              <Control
+                label="Speed"
+                type="range"
+                min={0.1}
+                max={1}
+                step={0.1}
+                value={rotationSpeed}
+                right={<span>{rotationSpeed}</span>}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRotationSpeed(e.target.valueAsNumber)} />
+            </FieldSet>
+            <FieldSet label="Background">
+              <Control
+                label="Show"
+                name="environment"
+                type="radio"
+                checked={showEnvironment}
+                value="show"
+                onChange={() => setShowEnvironment(true)} />
+              <Control
+                label="Hide"
+                name="environment"
+                type="radio"
+                checked={!showEnvironment}
+                value="hide"
+                onChange={() => setShowEnvironment(false)} />
+            </FieldSet>
           </div>
           <div className="c-app__control-group c-app__control-group--row c-app__control-group--fixed">
             <Button
