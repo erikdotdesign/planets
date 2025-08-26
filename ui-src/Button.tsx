@@ -19,7 +19,7 @@ const Button = ({
       className={`c-button ${modifierClasses}`}
       {...props}>
       {
-        modifierClasses.includes("planet")
+        modifierClasses.includes("space")
         ? <>
             <div className="h-crosshair h-crosshair--top-left" />
             <div className="h-crosshair h-crosshair--top-right" />
@@ -29,7 +29,7 @@ const Button = ({
       }
       {children}
       {
-        modifierClasses.includes("planet")
+        modifierClasses.includes("space")
         ? <>
             <div className='h-rule h-rule--bottom' />
             <div className="h-crosshair h-crosshair--bottom-left" />

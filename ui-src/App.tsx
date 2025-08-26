@@ -188,7 +188,7 @@ const App = () => {
             {
               Object.keys(PLANETS).map((k) => (
                 <Button
-                  modifier={[...(planet === k ? ["radio-active"] : []), "planet", "rule", "radio"]}
+                  modifier={[...(planet === k ? ["radio-active"] : []), "planet", "space", "radio"]}
                   key={k}
                   onClick={() => setPlanet(k)}>
                   <div
@@ -286,7 +286,7 @@ const App = () => {
           </div>
           <div className="c-app__control-group c-app__control-group--row c-app__control-group--fixed">
             <Button
-              modifier={["icon", "circle"]}
+              modifier={["icon", "space", "circle"]}
               onClick={() => setPlaying(!playing)}>
               {
                 playing
@@ -295,7 +295,7 @@ const App = () => {
               }
             </Button>
             <Button
-              modifier={["primary", "icon", "circle", ...[recording ? "red" : []] as string[]]}
+              modifier={["primary", "space", "icon", "circle", ...[recording ? "red" : []] as string[]]}
               onClick={handleAddPlanet}>
               {
                 recording
