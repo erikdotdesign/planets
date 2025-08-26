@@ -46,10 +46,13 @@ export type TextureMap = {
   ring?: string;
 };
 
+export type RotationDirection = "prograde" | "retrograde" | "synchronous";
+
 export interface PlanetData {
   type: PlanetryObject;
   textures: TextureMap;
   radius: number;
+  rotationDirection?: RotationDirection;
   bg?: string;
 }
 
@@ -65,16 +68,19 @@ export const PLANETS: Record<string, PlanetData> = {
     type: "star",
     radius: 1,
     textures: makeTextures(sun),
+    rotationDirection: "prograde", // arbitrary for star
   },
   Mercury: {
     type: "planet",
     radius: 1,
     textures: makeTextures(mercury, { bump: mercuryBump }),
+    rotationDirection: "prograde",
   },
   Venus: {
     type: "planet",
     radius: 1,
     textures: makeTextures(venus, { bump: venusBump }),
+    rotationDirection: "retrograde",
   },
   Earth: {
     type: "planet",
@@ -85,65 +91,78 @@ export const PLANETS: Record<string, PlanetData> = {
       atmosphere: earthClouds,
       atmosphereAlpha: earthCloudsAlpha,
     }),
+    rotationDirection: "prograde",
   },
   Moon: {
     type: "moon",
     radius: 1,
     textures: makeTextures(moon, { bump: moonBump }),
+    rotationDirection: "prograde"  // "synchronous",
   },
   Mars: {
     type: "planet",
     radius: 1,
     textures: makeTextures(mars, { bump: marsBump }),
+    rotationDirection: "prograde",
   },
   Jupiter: {
     type: "planet",
     radius: 1,
     textures: makeTextures(jupiter),
+    rotationDirection: "prograde",
   },
   Saturn: {
     type: "planet",
     radius: 1,
     textures: makeTextures(saturn, { ring: saturnRing }),
+    rotationDirection: "prograde",
   },
   Uranus: {
     type: "planet",
     radius: 1,
     textures: makeTextures(uranus),
+    rotationDirection: "retrograde",
   },
   Neptune: {
     type: "planet",
     radius: 1,
     textures: makeTextures(neptune),
+    rotationDirection: "prograde",
   },
   Ganymede: {
     type: "moon",
     radius: 1,
     textures: makeTextures(ganymede),
+    rotationDirection: "prograde"  // "synchronous",
   },
   Titan: {
     type: "moon",
     radius: 1,
     textures: makeTextures(titan),
+    rotationDirection: "prograde" // "synchronous",
   },
   Callisto: {
     type: "moon",
     radius: 1,
     textures: makeTextures(callisto),
+    rotationDirection: "prograde" // "synchronous",
   },
   Io: {
     type: "moon",
     radius: 1,
     textures: makeTextures(io),
+    rotationDirection: "prograde" // "synchronous",
   },
   Europa: {
     type: "moon",
     radius: 1,
     textures: makeTextures(europa),
+    rotationDirection: "prograde" // "synchronous",
   },
   Triton: {
     type: "moon",
     radius: 1,
     textures: makeTextures(triton),
+    rotationDirection: "retrograde",
   },
 };

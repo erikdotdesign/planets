@@ -17,8 +17,7 @@ export async function generatePlanetThumbnails() {
   for (const [name, planet] of Object.entries(PLANETS)) {
     await viewer.setPlanet({
       type: planet.type,
-      textures: planet.textures,
-      radius: planet.radius,
+      textures: planet.textures
     });
 
     const image = await viewer.renderOnce();

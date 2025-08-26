@@ -2,11 +2,11 @@ import { useState, useRef, useEffect } from "react";
 import { capitalize } from "./helpers";
 import { PLANETS } from "./planets";
 import { LightMode, PlanetViewer } from './three-planet';
-import "./App.css";
+import { generatePlanetThumbnails } from "./thumbnails";
 import Button from "./Button";
 import Control from "./Control";
 import FieldSet from "./FieldSet";
-import { generatePlanetThumbnails } from "./thumbnails";
+import "./App.css";
 
 const App = () => {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
@@ -35,16 +35,16 @@ const App = () => {
     });
     viewerRef.current = viewer;
     viewer.startLoop();
-    generatePlanetThumbnails().then(previews => {
-      setThumbnails(previews);
+    generatePlanetThumbnails().then(t => {
+      setThumbnails(t);
     });
     return () => viewer.stopLoop();
   }, []);
 
   useEffect(() => {
     const v = viewerRef.current; if (!v) return;
-    const { type, textures } = PLANETS[planet];
-    v.setPlanet({ type, textures });
+    const { type, textures, rotationDirection } = PLANETS[planet];
+    v.setPlanet({ type, textures, rotationDirection });
   }, [planet]);
 
   useEffect(() => {
@@ -186,9 +186,9 @@ const App = () => {
                   key={k}
                   onClick={() => setPlanet(k)}>
                   <div
-                    className={`c-button__planet c-button__planet--${k.toLowerCase()}`}
+                    className={`c-button__planet c-button__planet--${k.toLowerCase()} ${!thumbnails ? "c-button__planet--loading" : ""}`}
                     style={{
-                      backgroundImage: `url(${thumbnails && thumbnails.find((t) => t.name === k).image})`
+                      backgroundImage: thumbnails ? `url(${thumbnails.find((t) => t.name === k).image})` : undefined
                     }}/>
                   <span>{ k }</span>
                 </Button>

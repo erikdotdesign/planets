@@ -152,6 +152,15 @@
   } */
 }
 
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%; /* Start at the left */
+  }
+  100% {
+    background-position: 400% 50%; /* Move to the right */
+  }
+}
+
 .c-button__planet {
   position: relative;
   width: 32px;
@@ -162,5 +171,12 @@
   &.c-button__planet--saturn {
     background-size: 32px 32px;
     background-position: initial;
+  }
+
+  &.c-button__planet--loading {
+    border-radius: 100%;
+    background-image: linear-gradient(to right, var(--color-bg-z1), var(--color-bg-z2), var(--color-bg-z1));
+    background-size: 400% 100%; /* Make the gradient wider than the element */
+    animation: gradient-animation 4s linear infinite;
   }
 }

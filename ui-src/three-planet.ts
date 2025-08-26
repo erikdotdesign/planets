@@ -25,6 +25,7 @@ export type PlanetOptions = {
   type: PlanetryObject;
   textures: TextureMap;
   rotationSpeed?: number;
+  rotationDirection?: "prograde" | "retrograde" | "synchronous";
 };
 
 export type LightMode = "sun" | "neutral";
@@ -82,6 +83,7 @@ export class PlanetViewer {
 
   private rotationSpeed = 0.5;
   private showEnvironment = true;
+  private currentRotationDirection: "prograde" | "retrograde" | "synchronous" = "prograde";
 
   private lightGroup = new THREE.Group();
 
@@ -218,7 +220,8 @@ export class PlanetViewer {
   }
 
   async setPlanet(opts: PlanetOptions) {
-    const { type, textures } = opts;
+    const { type, textures, rotationDirection = "prograde" } = opts;
+    this.currentRotationDirection = rotationDirection;
 
     const [baseTex, bumpTex, specTex, atmTex, atmAlpha, ringTex] =
       await Promise.all([
@@ -288,7 +291,11 @@ export class PlanetViewer {
       this.start = t;
 
       if (this.sphere && this.rotationSpeed !== 0) {
-        this.sphere.rotation.y += this.rotationSpeed * dt;
+        let directionMultiplier = 1;
+        if (this.currentRotationDirection === "retrograde") directionMultiplier = -1;
+        else if (this.currentRotationDirection === "synchronous") directionMultiplier = 0;
+
+        this.sphere.rotation.y += this.rotationSpeed * dt * directionMultiplier;
       }
 
       this.controls?.update();
