@@ -8,8 +8,8 @@ export async function generatePlanetThumbnails() {
     environment: false,
     controls: false,
     headless: true,
-    width: 64,
-    height: 64,
+    width: 48,
+    height: 48,
   });
 
   const previews: { name: string; image: string }[] = [];
@@ -17,7 +17,8 @@ export async function generatePlanetThumbnails() {
   for (const [name, planet] of Object.entries(PLANETS)) {
     await viewer.setPlanet({
       type: planet.type,
-      textures: planet.textures
+      textures: planet.textures,
+      tilt: planet.tilt
     });
 
     const image = await viewer.renderOnce();

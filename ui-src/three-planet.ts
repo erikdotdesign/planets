@@ -136,7 +136,7 @@ export class PlanetViewer {
   private initCamera(width: number, height: number) {
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
-    this.camera.position.set(0, 5, 5);
+    this.camera.position.set(5, 1, 0.5); // slight angle
     this.camera.lookAt(0, 0, 0);
   }
 
