@@ -23,6 +23,7 @@ const App = () => {
   const [planet, setPlanet] = useState<keyof typeof PLANETS>('Earth');
   const [rotationSpeed, setRotationSpeed] = useState(0.2);
   const [showEnvironment, setShowEnvironment] = useState(true);
+  const [includeTilt, setIncludeTilt] = useState(true);
   const [lighting, setLighting] = useState<LightMode>("sun");
   const viewerRef = useRef<PlanetViewer | null>(null);
 
@@ -43,8 +44,8 @@ const App = () => {
 
   useEffect(() => {
     const v = viewerRef.current; if (!v) return;
-    const { type, textures, rotationDirection } = PLANETS[planet];
-    v.setPlanet({ type, textures, rotationDirection });
+    const { type, textures, rotationDirection, tilt, radius } = PLANETS[planet];
+    v.setPlanet({ type, textures, rotationDirection, tilt, radius });
   }, [planet]);
 
   useEffect(() => {
@@ -65,6 +66,11 @@ const App = () => {
     if (!viewerRef.current) return;
     viewerRef.current.setLighting(lighting);
   }, [lighting]);
+
+  useEffect(() => {
+    if (!viewerRef.current) return;
+    viewerRef.current.toggleTilt(includeTilt);
+  }, [includeTilt]);
 
   const startPlanetRecording = () => {
     if (!canvasRef.current) return;
@@ -253,6 +259,13 @@ const App = () => {
                 value={rotationSpeed}
                 right={<span>{rotationSpeed}</span>}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRotationSpeed(e.target.valueAsNumber)} />
+              <Control
+                label="Tilt"
+                name="environment"
+                type="checkbox"
+                checked={includeTilt}
+                value="hide"
+                onChange={() => setIncludeTilt(!includeTilt)} />
             </FieldSet>
             <FieldSet label="Background">
               <Control

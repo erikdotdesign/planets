@@ -24,6 +24,8 @@ const RING_OUTER_RADIUS = 2.5;
 export type PlanetOptions = {
   type: PlanetryObject;
   textures: TextureMap;
+  radius?: number;
+  tilt?: number;
   rotationSpeed?: number;
   rotationDirection?: "prograde" | "retrograde" | "synchronous";
 };
@@ -40,7 +42,7 @@ export interface ViewerOptions {
 }
 
 // === Helpers ===
-function loadTexture(url?: string): Promise<THREE.Texture | undefined> {
+const loadTexture = (url?: string): Promise<THREE.Texture | undefined> => {
   if (!url) return Promise.resolve(undefined);
   return new Promise<THREE.Texture>((resolve, reject) => {
     new THREE.TextureLoader().load(
@@ -55,12 +57,16 @@ function loadTexture(url?: string): Promise<THREE.Texture | undefined> {
   });
 }
 
-function disposeAndRemove(scene: THREE.Scene, mesh?: THREE.Mesh) {
+const disposeAndRemove = (scene: THREE.Scene, mesh?: THREE.Mesh) => {
   if (!mesh) return;
   (mesh.material as THREE.Material).dispose();
   (mesh.geometry as THREE.BufferGeometry).dispose();
   scene.remove(mesh);
 }
+
+const degreesToRadians = (degrees: number): number => {
+  return (Math.PI * degrees) / 180;
+};
 
 // === Class ===
 export class PlanetViewer {
@@ -81,6 +87,8 @@ export class PlanetViewer {
   private frameId?: number;
   private start = performance.now();
 
+  private tiltEnabled = true; // new flag
+  private baseTilt: number = 0; // store the original tilt
   private rotationSpeed = 0.5;
   private showEnvironment = true;
   private currentRotationDirection: "prograde" | "retrograde" | "synchronous" = "prograde";
@@ -189,6 +197,17 @@ export class PlanetViewer {
       : null;
   }
 
+  toggleTilt(enabled: boolean) {
+    this.tiltEnabled = enabled;
+    if (!this.sphere) return;
+
+    this.sphere.rotation.x = enabled ? this.baseTilt * -1 : 0;
+
+    if (this.ring) {
+      this.ring.rotation.x = Math.PI / 2 - (enabled ? this.baseTilt : 0);
+    }
+  }
+
   // === Planet Setup ===
   private createRingMesh(texture: THREE.Texture): THREE.Mesh {
     const ringGeometry = new THREE.RingGeometry(
@@ -220,7 +239,7 @@ export class PlanetViewer {
   }
 
   async setPlanet(opts: PlanetOptions) {
-    const { type, textures, rotationDirection = "prograde" } = opts;
+    const { type, textures, rotationDirection = "prograde", tilt = 0, radius = 1 } = opts;
     this.currentRotationDirection = rotationDirection;
 
     const [baseTex, bumpTex, specTex, atmTex, atmAlpha, ringTex] =
@@ -251,12 +270,14 @@ export class PlanetViewer {
       mat = new THREE.MeshPhongMaterial({
         map: baseTex,
         bumpMap: bumpTex,
-        bumpScale: bumpTex ? 5 : 0,
+        bumpScale: bumpTex ? radius / 350 : 0,
         specularMap: specTex,
-        shininess: specTex ? 30 : 0,
+        shininess: specTex ? 5 : 0,
       });
     }
     this.sphere = new THREE.Mesh(geom, mat);
+    this.baseTilt = degreesToRadians(tilt);
+    this.sphere.rotation.x = this.tiltEnabled ? this.baseTilt * -1 : 0;
     this.scene.add(this.sphere);
 
     // Atmosphere
@@ -277,6 +298,7 @@ export class PlanetViewer {
     if (ringTex) {
       this.ring = this.createRingMesh(ringTex);
       this.scene.add(this.ring);
+      this.ring.rotation.x = Math.PI / 2 - (this.tiltEnabled ? this.baseTilt : 0);
     }
   }
 
