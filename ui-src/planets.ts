@@ -26,6 +26,7 @@ import saturnRing from "./textures/saturn-ring.png";
 
 import uranus from "./textures/uranus.jpg";
 import neptune from "./textures/neptune.jpg";
+import pluto from "./textures/pluto.jpg";
 
 import ganymede from "./textures/ganymede.jpg";
 import titan from "./textures/titan.webp";
@@ -139,6 +140,13 @@ export const PLANETS: Record<string, PlanetData> = {
     tilt: 28.32,
     textures: makeTextures(neptune),
     rotationDirection: "prograde",
+  },
+  Pluto: {
+    type: "planet",
+    radius: 738.38,
+    tilt: 122.5,
+    textures: makeTextures(pluto),
+    rotationDirection: "retrograde",
   },
   Ganymede: {
     type: "moon",
