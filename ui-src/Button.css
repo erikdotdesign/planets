@@ -71,13 +71,6 @@
     &:hover {
       background: var(--color-bg-z1) !important;
     }
-    
-    .h-crosshair {
-      &::before,
-      &::after {
-        background: var(--color-text-lightest);
-      }
-    }
   }
 
   &.c-button--radio-active {

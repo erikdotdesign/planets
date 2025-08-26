@@ -24,6 +24,7 @@ const Button = ({
             <div className="h-crosshair h-crosshair--top-left" />
             <div className="h-crosshair h-crosshair--top-right" />
             <div className='h-rule h-rule--top' />
+            <div className="h-rule h-rule--left" />
           </>
         : null
       }
@@ -31,6 +32,7 @@ const Button = ({
       {
         modifierClasses.includes("space")
         ? <>
+            <div className="h-rule h-rule--right" />
             <div className='h-rule h-rule--bottom' />
             <div className="h-crosshair h-crosshair--bottom-left" />
             <div className="h-crosshair h-crosshair--bottom-right" />
