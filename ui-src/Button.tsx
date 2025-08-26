@@ -18,13 +18,25 @@ const Button = ({
     <button
       className={`c-button ${modifierClasses}`}
       {...props}>
-      <div className="c-button__crosshair c-button__crosshair--top-left" />
-      <div className="c-button__crosshair c-button__crosshair--top-right" />
-      <div className='c-button__rule c-button__rule--top' />
+      {
+        modifierClasses.includes("planet")
+        ? <>
+            <div className="h-crosshair h-crosshair--top-left" />
+            <div className="h-crosshair h-crosshair--top-right" />
+            <div className='h-rule h-rule--top' />
+          </>
+        : null
+      }
       {children}
-      <div className='c-button__rule c-button__rule--bottom' />
-      <div className="c-button__crosshair c-button__crosshair--bottom-left" />
-      <div className="c-button__crosshair c-button__crosshair--bottom-right" />
+      {
+        modifierClasses.includes("planet")
+        ? <>
+            <div className='h-rule h-rule--bottom' />
+            <div className="h-crosshair h-crosshair--bottom-left" />
+            <div className="h-crosshair h-crosshair--bottom-right" />
+          </>
+        : null
+      }
     </button>
   )
 }

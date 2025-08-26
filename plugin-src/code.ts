@@ -11,7 +11,7 @@ const loadFromStorage = async (key: string) => {
   figma.ui.postMessage({ type: "storage-loaded", key, value });
 };
 
-const addImage = async (img: string, disclaimer = false) => {
+const addImage = async (img: string, planet: string, disclaimer = false) => {
   // Fallback to image
   const base64 = img.split(",")[1];
   const data = figma.base64Decode(base64);
@@ -19,7 +19,7 @@ const addImage = async (img: string, disclaimer = false) => {
 
   const node = figma.createRectangle();
   node.fills = [{ type: "IMAGE", scaleMode: "FILL", imageHash: image.hash }];
-  node.name = "Planet";
+  node.name = planet;
   scaleAndPositionNode(node, 1, 1200);
   figma.currentPage.selection = [node];
   if (disclaimer) {
@@ -29,7 +29,7 @@ const addImage = async (img: string, disclaimer = false) => {
   }
 };
 
-const addVideoOrImage = async (msg: { video: string; image: string }) => {
+const addVideoOrImage = async (msg: { video: string; image: string, planet: string }) => {
   try {
     // Try video first
     const base64 = msg.video.split(",")[1];
@@ -38,13 +38,13 @@ const addVideoOrImage = async (msg: { video: string; image: string }) => {
 
     const node = figma.createRectangle();
     node.fills = [{ type: "VIDEO", scaleMode: "FILL", videoHash: video.hash }];
-    node.name = "Planet";
+    node.name = msg.planet;
     scaleAndPositionNode(node, 1, 1200);
     figma.currentPage.selection = [node];
     figma.notify("🪐 Video added");
   } catch {
     // Fallback to image
-    addImage(msg.image, true);
+    addImage(msg.image, msg.planet, true);
   }
 };
 
@@ -52,7 +52,7 @@ const handlers: Record<string, (msg: any) => void | Promise<void>> = {
   "save-storage": (msg) => saveToStorage(msg.key, msg.value),
   "load-storage": (msg) => loadFromStorage(msg.key),
   "add-planet-video": (msg) => addVideoOrImage(msg),
-  "add-planet-image": (msg) => addImage(msg.image)
+  "add-planet-image": (msg) => addImage(msg.image, msg.planet)
 };
 
 figma.ui.onmessage = async (msg) => {

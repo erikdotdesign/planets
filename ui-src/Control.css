@@ -30,6 +30,13 @@
 
   &:hover {
     box-shadow: 0 0 0 1px inset var(--color-border-z3);
+
+    .h-crosshair {
+      &::before,
+      &::after {
+        background: var(--color-text-light);
+      }
+    }
   }
 
   .c-control {
@@ -57,69 +64,6 @@
         margin-top: 6px;
       }
     }
-  }
-}
-
-.c-control-fieldset__rule {
-  position: absolute;
-  width: calc(100% - 24px);
-  height: 1px;
-  left: 12px;
-  background: var(--color-bg-z0);
-
-  &.c-control-fieldset__rule--top {
-    top: 0;
-  }
-
-  &.c-control-fieldset__rule--bottom {
-    bottom: 0;
-  }
-}
-
-.c-control-fieldset__crosshair {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: visible;
-
-  &:before,
-  &:after {
-    content: '';
-    display: block;
-    position: absolute;
-    background: var(--color-text-lighter);
-  }
-
-  &:before {
-    width: 5px;
-    height: 1px;
-    left: -2px;
-  }
-
-  &:after {
-    width: 1px;
-    height: 5px;
-    top: -2px;
-  }
-
-  &.c-control-fieldset__crosshair--top-left,
-  &.c-control-fieldset__crosshair--top-right {
-    top: 0;
-  }
-
-  &.c-control-fieldset__crosshair--bottom-left,
-  &.c-control-fieldset__crosshair--bottom-right {
-    bottom: 0;
-  }
-
-  &.c-control-fieldset__crosshair--top-left,
-  &.c-control-fieldset__crosshair--bottom-left {
-    left: 0
-  }
-
-  &.c-control-fieldset__crosshair--top-right,
-  &.c-control-fieldset__crosshair--bottom-right {
-    right: 0;
   }
 }
 

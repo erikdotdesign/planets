@@ -153,6 +153,7 @@
   canvas {
     width: 100% !important;
     height: 100% !important;
+    background: transparent !important;
   }
 }
 
@@ -205,4 +206,68 @@
 
 .h-pointer {
   cursor: pointer;
+}
+
+.h-rule {
+  position: absolute;
+  width: calc(100% - 64px);
+  height: 1px;
+  left: 32px;
+  background: var(--color-bg-z0);
+
+  &.h-rule--top {
+    top: 0;
+  }
+
+  &.h-rule--bottom {
+    bottom: 0;
+  }
+}
+
+.h-crosshair {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: visible;
+
+  &:before,
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    background: var(--color-text-lighter);
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+
+  &:before {
+    width: 5px;
+    height: 1px;
+  }
+
+  &:after {
+    width: 1px;
+    height: 5px;
+  }
+
+  &.h-crosshair--top-left,
+  &.h-crosshair--top-right {
+    top: 0;
+  }
+
+  &.h-crosshair--bottom-left,
+  &.h-crosshair--bottom-right {
+    bottom: 0;
+  }
+
+  &.h-crosshair--top-left,
+  &.h-crosshair--bottom-left {
+    left: 0
+  }
+
+  &.h-crosshair--top-right,
+  &.h-crosshair--bottom-right {
+    right: 0;
+  }
 }

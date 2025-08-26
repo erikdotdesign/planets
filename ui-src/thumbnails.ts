@@ -1,5 +1,5 @@
 import { PlanetViewer } from './three-planet';
-import { PLANETS } from './constants'; // an array of 16 PlanetOptions or { type, textures }
+import { PLANETS } from './planets'; // an array of 16 PlanetOptions or { type, textures }
 
 export async function generatePlanetThumbnails() {
   const canvas = document.createElement('canvas');

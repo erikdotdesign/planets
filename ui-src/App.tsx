@@ -1,10 +1,9 @@
-import { useState, useRef, useReducer, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { capitalize } from "./helpers";
-import { PLANETS } from "./constants";
+import { PLANETS } from "./planets";
 import { LightMode, PlanetViewer } from './three-planet';
 import "./App.css";
 import Button from "./Button";
-import PlanetThumbnail from "./PlanetThumbnail";
 import Control from "./Control";
 import FieldSet from "./FieldSet";
 import { generatePlanetThumbnails } from "./thumbnails";
@@ -13,8 +12,8 @@ const App = () => {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [recording, setRecording] = useState<boolean>(false);
   const [recordingTime, setRecordingTime] = useState<number>(0);
+  const [playing, setPlaying] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const viewerRef = useRef<PlanetViewer | null>(null);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const recordedChunksRef = useRef<BlobPart[]>([]);
@@ -25,9 +24,9 @@ const App = () => {
   const [rotationSpeed, setRotationSpeed] = useState(0.2);
   const [showEnvironment, setShowEnvironment] = useState(true);
   const [lighting, setLighting] = useState<LightMode>("sun");
-  const [playing, setPlaying] = useState(true);
+  const viewerRef = useRef<PlanetViewer | null>(null);
 
-  const [thumbnails, setThumbnails] = useState(null);
+  const [thumbnails, setThumbnails] = useState<{name: string; image: string}[] | null>(null);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -38,22 +37,14 @@ const App = () => {
     viewer.startLoop();
     generatePlanetThumbnails().then(previews => {
       setThumbnails(previews);
-      // console.log(previews);
-      // previews.forEach(p => {
-      //   console.log(p.type, p.image);
-      //   // optionally create <img> elements to preview:
-      //   const img = document.createElement('img');
-      //   img.src = p.image;
-      //   document.body.appendChild(img);
-      // });
     });
     return () => viewer.stopLoop();
   }, []);
 
   useEffect(() => {
     const v = viewerRef.current; if (!v) return;
-    const { type, textures, radius } = PLANETS[planet];
-    v.setPlanet({ type, textures, radius });
+    const { type, textures } = PLANETS[planet];
+    v.setPlanet({ type, textures });
   }, [planet]);
 
   useEffect(() => {
@@ -131,7 +122,8 @@ const App = () => {
               pluginMessage: {
                 type: "add-planet-video",
                 video: videoDataUrl,
-                image: stillImageDataUrl.current
+                image: stillImageDataUrl.current,
+                planet: planet
               },
             },
             "*"
@@ -163,6 +155,7 @@ const App = () => {
         pluginMessage: {
           type: "add-planet-image",
           image: stillImageDataUrl,
+          planet: planet
         },
       },
       "*"
@@ -189,7 +182,7 @@ const App = () => {
             {
               Object.keys(PLANETS).map((k) => (
                 <Button
-                  modifier={[...(planet === k ? ["radio"] : []), "planet", "rule"]}
+                  modifier={[...(planet === k ? ["radio-active"] : []), "planet", "rule", "radio"]}
                   key={k}
                   onClick={() => setPlanet(k)}>
                   <div

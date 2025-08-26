@@ -15,13 +15,13 @@ const FieldSet = ({
       <legend className="c-control__label c-control__label--legend">
         { label }
       </legend>
-      <div className="c-control-fieldset__crosshair c-control-fieldset__crosshair--top-left" />
-      <div className="c-control-fieldset__crosshair c-control-fieldset__crosshair--top-right" />
-      <div className="c-control-fieldset__rule c-control-fieldset__rule--top" />
+      <div className="h-crosshair h-crosshair--top-left" />
+      <div className="h-crosshair h-crosshair--top-right" />
+      <div className="h-rule h-rule--top" />
       { children }
-      <div className="c-control-fieldset__rule c-control-fieldset__rule--bottom" />
-      <div className="c-control-fieldset__crosshair c-control-fieldset__crosshair--bottom-left" />
-      <div className="c-control-fieldset__crosshair c-control-fieldset__crosshair--bottom-right" />
+      <div className="h-rule h-rule--bottom" />
+      <div className="h-crosshair h-crosshair--bottom-left" />
+      <div className="h-crosshair h-crosshair--bottom-right" />
     </fieldset>
   );
 }

@@ -62,6 +62,25 @@
   }
 
   &.c-button--radio {
+    color: var(--color-text-light);
+    font-weight: normal;
+    box-shadow: none;
+    z-index: 2;
+    background: none;
+
+    &:hover {
+      background: var(--color-bg-z1) !important;
+    }
+    
+    .h-crosshair {
+      &::before,
+      &::after {
+        background: var(--color-text-lightest);
+      }
+    }
+  }
+
+  &.c-button--radio-active {
     color: var(--color-text-base);
     font-weight: bold;
     box-shadow: 0 0 0 1px inset var(--color-border-z3) !important;
@@ -72,8 +91,11 @@
       background: var(--color-bg-z1) !important;
     }
 
-    .c-button__crosshair {
-      display: block;
+    .h-crosshair {
+      &::before,
+      &::after {
+        background: var(--color-text-base);
+      }
     }
   }
 
@@ -120,14 +142,14 @@
     }
   }
 
-  &.c-button--rule {
+  /* &.c-button--rule {
     .c-button__rule {
       display: block;
     }
-    /* .c-button__crosshair {
+    .c-button__crosshair {
       display: block;
-    } */
-  }
+    }
+  } */
 }
 
 .c-button__planet {
@@ -140,70 +162,5 @@
   &.c-button__planet--saturn {
     background-size: 32px 32px;
     background-position: initial;
-  }
-}
-
-.c-button__rule {
-  display: none;
-  position: absolute;
-  width: calc(100% - 24px);
-  height: 1px;
-  left: 12px;
-  background: var(--color-bg-z0);
-
-  &.c-button__rule--top {
-    top: 0;
-  }
-
-  &.c-button__rule--bottom {
-    bottom: 0;
-  }
-}
-
-.c-button__crosshair {
-  display: none;
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: visible;
-
-  &:before,
-  &:after {
-    content: '';
-    display: block;
-    position: absolute;
-    background: var(--color-text-lighter);
-  }
-
-  &:before {
-    width: 5px;
-    height: 1px;
-    left: -2px;
-  }
-
-  &:after {
-    width: 1px;
-    height: 5px;
-    top: -2px;
-  }
-
-  &.c-button__crosshair--top-left,
-  &.c-button__crosshair--top-right {
-    top: 0;
-  }
-
-  &.c-button__crosshair--bottom-left,
-  &.c-button__crosshair--bottom-right {
-    bottom: 0;
-  }
-
-  &.c-button__crosshair--top-left,
-  &.c-button__crosshair--bottom-left {
-    left: 0
-  }
-
-  &.c-button__crosshair--top-right,
-  &.c-button__crosshair--bottom-right {
-    right: 0;
   }
 }
