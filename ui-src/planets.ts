@@ -10,8 +10,8 @@ import venus from "./textures/venus-2k.jpg";
 import earth from "./textures/earth.jpg";
 import earthBump from "./textures/earth-bump.jpg";
 import earthSpec from "./textures/earth-specular.jpg";
-import earthClouds from "./textures/earth-clouds.jpg";
-import earthCloudsAlpha from "./textures/earth-clouds-alpha.jpg";
+import earthClouds from "./textures/earth-clouds-2k.png";
+import earthCloudsAlpha from "./textures/earth-clouds-alpha-2k.jpg";
 
 import moon from "./textures/moon.jpg";
 import moonBump from "./textures/moon-bump.jpg";

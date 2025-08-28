@@ -304,7 +304,7 @@ export class PlanetViewer {
         alphaMap: atmAlpha,
         transparent: true,
         depthWrite: false,
-        side: THREE.DoubleSide,
+        side: THREE.DoubleSide
       });
       this.atmosphere = new THREE.Mesh(atmGeom, atmMat);
       this.sphere.add(this.atmosphere);
