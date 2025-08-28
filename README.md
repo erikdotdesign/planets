@@ -1,43 +1,56 @@
-# Flow Field
+# Planets — Figma Plugin  
 
-A **flow field generator for Figma** — create engaging **animated or static flow fields** with customizable colors, particles, and noise settings. Export your creations as **images or videos** directly from Figma.
+Animated **3D renders** of the Sun, planets, and moons — right inside Figma.  
+Export still images or looping videos of celestial objects with full control over **lighting, rotation, and background**.  
 
-![cover](flow-field-cover.png) 
+## Features  
 
-## Features
+- **17 celestial models** included:  
+  Sun, Mercury, Venus, Earth, Moon, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, Ganymede, Titan, Callisto, Io, Europa, Triton  
 
-- **Display Modes**
-  - **Animated** flow fields (video export up to 60s)
-  - **Static** flow fields (single frame image export)
+- **Controls for realism & style**  
+  - Lighting intensity & direction  
+  - Planetary rotation speed  
+  - Solid, gradient, or space backgrounds  
 
-- **Color Controls**
-  - Unlimited custom color palettes
-  - Choose between opaque or transparent backgrounds
-  - Includes **20+ curated preset palettes**
-  - Shuffle/randomize palettes for quick exploration
+- **Export options**  
+  - 1200×1200 still images (`.png`)  
+  - Looping videos (`.webm`, up to 1 minute)  
 
-- **Path Controls**
-  - Switch between **dots** or **lines**
-  - Fine-grain control over particle size, count, and speed
-  - Adjustable noise scale and strength
+- **Smart resizing**  
+  - Export matches selection bounds  
+  - Defaults to viewport size if nothing selected  
 
-- **Export Options**
-  - Export **1200×1200 PNG or WebM**
-  - Video export capped at 60 seconds
-  - Exports fit to **current selection**, or to the **viewport** if no selection
+- **Theme support**  
+  - Adapts seamlessly to Figma’s **Light** and **Dark** modes  
 
-- **Workflow Enhancements**
-  - One-click **parameter randomizer** to instantly explore new variations
-  - Supports **Figma light and dark themes** for a seamless UI experience
+## Getting Started  
 
-## Getting Started
+1. Open the **Figma Community** and search for **Planets** 
+2. Select a frame or leave nothing selected to use your viewport  
+3. Launch **Planets** from the plugin menu  
+4. Choose your object, adjust settings, and **Render → Export**  
 
-1. Install **flow-field** from the Figma Community
-2. Open the plugin inside your Figma file  
-3. Choose **Static** or **Animated** display type  
-4. Tweak colors, paths, and noise parameters  
-5. Export your flow field as an image or video
+## Controls  
 
-## License
+- **Object:** Pick a planet, moon, or the sun  
+- **Lighting:** Adjust intensity, position, and shadow detail  
+- **Rotation:** Static or animated spin  
+- **Background:** Transparent or starfield  
+
+## Exports  
+
+- **Still Image (PNG):** 1200×1200 max resolution  
+- **Animated Video (WEBM):** Up to 60 seconds  
+- **Smart Fit:** Automatically scales export to match your selection or viewport  
+
+## Development  
+
+This plugin is built with:  
+- [Three.js](https://threejs.org/) for 3D rendering  
+- [Figma Plugin API](https://www.figma.com/plugin-docs/)  
+- React + TypeScript  
+
+## License 
 
 MIT

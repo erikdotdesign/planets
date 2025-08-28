@@ -4,10 +4,12 @@ import './Button.css';
 const Button = ({
   children,
   modifier,
+  bRef,
   ...props
 }: {
   children?: React.ReactNode;
   modifier?: string | string[];
+  bRef?: React.RefObject<HTMLButtonElement>;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   const modifierClasses = Array.isArray(modifier)
     ? modifier.map((m) => `c-button--${m}`).join(' ')
@@ -16,6 +18,7 @@ const Button = ({
     : '';
   return (
     <button
+      ref={bRef}
       className={`c-button ${modifierClasses}`}
       {...props}>
       {

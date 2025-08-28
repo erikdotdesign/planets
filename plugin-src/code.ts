@@ -1,6 +1,6 @@
 import { scaleAndPositionNode } from "./helpers";
 
-figma.showUI(__html__, { themeColors: true, width: 792 + 96, height: 488 });
+figma.showUI(__html__, { themeColors: true, width: 888, height: 488 });
 
 const saveToStorage = async (key: string, value: any) => {
   await figma.clientStorage.setAsync(key, value);

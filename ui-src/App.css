@@ -159,8 +159,8 @@
 
 .c-app__canvas {
   position: relative;
-  flex: 2; /* or 2 if you want it bigger */
-  min-width: 0; /* important to allow flex shrinking */
+  flex: 2;
+  min-width: 0;
   min-height: 0; 
   height: auto;
   aspect-ratio: 1/1;

@@ -14,6 +14,7 @@ const App = () => {
   const [recordingTime, setRecordingTime] = useState<number>(0);
   const [playing, setPlaying] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const buttonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const recordedChunksRef = useRef<BlobPart[]>([]);
@@ -21,18 +22,61 @@ const App = () => {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [planet, setPlanet] = useState<keyof typeof PLANETS>('Earth');
-  const [rotationSpeed, setRotationSpeed] = useState(0.2);
-  const [showEnvironment, setShowEnvironment] = useState(true);
-  const [includeTilt, setIncludeTilt] = useState(true);
+  const [rotationSpeed, setRotationSpeed] = useState<number>(0.2);
+  const [showEnvironment, setShowEnvironment] = useState<boolean>(true);
+  const [includeTilt, setIncludeTilt] = useState<boolean>(true);
   const [lighting, setLighting] = useState<LightMode>("sun");
+  const [zoom, setZoom] = useState<number>(5);
   const viewerRef = useRef<PlanetViewer | null>(null);
 
   const [thumbnails, setThumbnails] = useState<{name: string; image: string}[] | null>(null);
 
   useEffect(() => {
+    parent.postMessage({ pluginMessage: { type: "load-storage", key: "cache" } }, "*");
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (msg.type === "storage-loaded") {
+        if (msg.key === "cache" && msg.value) {
+          setPlanet(msg.value.planet),
+          setPlaying(msg.value.playing),
+          setRotationSpeed(msg.value.rotationSpeed),
+          setShowEnvironment(msg.value.showEnvironment),
+          setLighting(msg.value.lighting),
+          setIncludeTilt(msg.value.includeTilt),
+          setZoom(msg.value.zoom)
+
+          if (msg.value.planet) {
+            buttonRefs.current[planet]!.scrollIntoView();
+          }
+          if (viewerRef.current) {
+            viewerRef.current.setZoomLevel(msg.value.zoom);
+          }
+        }
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    parent.postMessage({
+      pluginMessage: { type: "save-storage", key: "cache", value: {
+        planet,
+        playing,
+        rotationSpeed,
+        showEnvironment,
+        lighting,
+        includeTilt,
+        zoom
+      }},
+    }, "*");
+  }, [planet, playing, rotationSpeed, showEnvironment, lighting, includeTilt, zoom]);
+
+  useEffect(() => {
     if (!canvasRef.current) return;
     const viewer = new PlanetViewer(canvasRef.current, {
-      lightMode: lighting
+      lightMode: lighting,
+      onZoomChange: (zoom) => {
+        setZoom(zoom);
+      }
     });
     viewerRef.current = viewer;
     viewer.startLoop();
@@ -45,7 +89,13 @@ const App = () => {
   useEffect(() => {
     const v = viewerRef.current; if (!v) return;
     const { type, textures, rotationDirection, tilt, radius } = PLANETS[planet];
-    v.setPlanet({ type, textures, rotationDirection, tilt, radius });
+    v.setPlanet({ 
+      type, 
+      textures, 
+      rotationDirection, 
+      tilt, 
+      radius 
+    });
   }, [planet]);
 
   useEffect(() => {
@@ -188,13 +238,16 @@ const App = () => {
             {
               Object.keys(PLANETS).map((k) => (
                 <Button
+                  bRef={(el) => (buttonRefs.current[k] = el)}
                   modifier={[...(planet === k ? ["radio-active"] : []), "planet", "space", "radio"]}
                   key={k}
                   onClick={() => setPlanet(k)}>
                   <div
                     className={`c-button__planet c-button__planet--${k.toLowerCase()} ${!thumbnails ? "c-button__planet--loading" : ""}`}
                     style={{
-                      backgroundImage: thumbnails ? `url(${thumbnails.find((t) => t.name === k).image})` : undefined
+                      backgroundImage: thumbnails ? `url(${(
+                        thumbnails.find((t) => t.name === k) as {name: string; image: string}).image
+                      })` : undefined
                     }}/>
                   <span>{ k }</span>
                 </Button>
