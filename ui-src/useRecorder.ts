@@ -1,0 +1,72 @@
+import { useRef, useState } from "react";
+
+const useRecorder = (canvasRef: React.RefObject<HTMLCanvasElement>, planet: string, setVideoUrl: any) => {
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const recordedChunksRef = useRef<BlobPart[]>([]);
+  const stillImageDataUrl = useRef<string>("");
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [recording, setRecording] = useState(false);
+  const [time, setTime] = useState(0);
+
+  const start = () => {
+    if (!canvasRef.current) return;
+    setRecording(true);
+    recordedChunksRef.current = [];
+    stillImageDataUrl.current = canvasRef.current.toDataURL("image/png");
+
+    const stream = canvasRef.current.captureStream(60);
+    recorderRef.current = new MediaRecorder(stream, { mimeType: "video/webm" });
+
+    recorderRef.current.ondataavailable = (e) => e.data.size && recordedChunksRef.current.push(e.data);
+    recorderRef.current.start();
+
+    timerRef.current = setInterval(() => setTime(t => t + 1), 1000);
+  };
+
+  const stop = () =>
+    new Promise<void>((resolve) => {
+      if (!recorderRef.current) return resolve();
+      recorderRef.current.onstop = () => {
+        const videoBlob = new Blob(recordedChunksRef.current, { type: "video/webm" });
+
+        // console.log("Video size in MB:", videoBlob.size / (1024 * 1024));
+
+        // // Dev preview
+        // const url = URL.createObjectURL(videoBlob);
+        // setVideoUrl(url);
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          parent.postMessage({
+            pluginMessage: {
+              type: "add-planet-video",
+              video: reader.result,
+              image: stillImageDataUrl.current,
+              planet,
+            },
+          }, "*");
+          setRecording(false);
+          setTime(0);
+          timerRef.current && clearInterval(timerRef.current);
+          resolve();
+        };
+        reader.readAsDataURL(videoBlob);
+        recorderRef.current = null;
+      };
+      recorderRef.current.stop();
+    });
+
+  const snapshot = () => {
+    if (!canvasRef.current) return;
+    const img = canvasRef.current.toDataURL("image/png");
+    parent.postMessage({ pluginMessage: { 
+      type: "add-planet-image", 
+      image: img, 
+      planet 
+    } }, "*");
+  };
+
+  return { recording, time, start, stop, snapshot };
+};
+
+export default useRecorder;
