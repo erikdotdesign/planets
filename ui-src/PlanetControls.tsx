@@ -1,20 +1,19 @@
 import { LightMode } from './planetViewer';
+import { PlanetState, PlanetAction } from "./planetStateReducer";
+import { Recorder } from './useRecorder';
 import LightingControls from "./LightingControls";
 import RotationControls from "./RotationControls";
 import BackgroundControls from "./BackgroundControls";
 import PlayerControls from './PlayerControls';
-import { PlanetState, PlanetAction } from "./planetStateReducer";
 
 const PlanetControls = ({
   planetState,
   planetStateDispatch,
-  recording,
-  handleAddPlanet
+  recorderRef
 }: {
   planetState: PlanetState;
   planetStateDispatch: (action: PlanetAction) => void;
-  recording: boolean;
-  handleAddPlanet: () => void;
+  recorderRef: Recorder;
 }) => {
   return (
     <div className="c-app__controls c-app__controls--right">
@@ -60,11 +59,10 @@ const PlanetControls = ({
               playing
             })
           }}
-          recording={recording}
-          handleAddPlanet={handleAddPlanet} />
+          recorderRef={recorderRef} />
       </div>
     </div>
   );
-}
+};
 
 export default PlanetControls;

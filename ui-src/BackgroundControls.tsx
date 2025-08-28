@@ -9,7 +9,9 @@ const BackgroundControls = ({
   setShowEnvironment: (showEnvironment: boolean) => void;
 }) => {
   return (
-    <FieldSet label="Background">
+    <FieldSet 
+      label="Background"
+      spaceDecor>
       <Control
         label="Show"
         name="environment"

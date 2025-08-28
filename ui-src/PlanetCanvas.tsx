@@ -1,20 +1,18 @@
+import { Recorder } from "./useRecorder";
+
 const PlanetCanvas = ({
   canvasRef,
-  recording,
-  recordingTime,
-  videoUrl
+  recorderRef
 }: {
   canvasRef: React.RefObject<HTMLCanvasElement>;
-  recording: boolean;
-  recordingTime: number;
-  videoUrl?: any;
+  recorderRef: Recorder;
 }) => {
   return (
     <div 
       className="c-app__canvas"
       id="three">
       {
-        videoUrl
+        recorderRef.videoUrl
         ? <div className="c-app__canvas-overlay">
             <video 
             className="c-app__video-preview"
@@ -22,7 +20,7 @@ const PlanetCanvas = ({
               width: "100%",
               height: "100%"
             }}
-            src={videoUrl} 
+            src={recorderRef.videoUrl} 
             controls 
             autoPlay 
             loop />
@@ -32,15 +30,15 @@ const PlanetCanvas = ({
       <div 
         className="c-app__canvas-overlay c-app__canvas-overlay--recording"
         style={{
-          display: recording ? "flex" : "none"
+          display: recorderRef.recording ? "flex" : "none"
         }}>
         <div>
-          <span>{recordingTime}s</span>
+          <span>{recorderRef.time}s</span>
         </div>
       </div>
       <canvas ref={canvasRef} />
     </div>
   );
-}
+};
 
 export default PlanetCanvas;

@@ -90,6 +90,6 @@ const Control = ({
       </div>
     </ContainerTag>
   )
-}
+};
 
 export default Control;

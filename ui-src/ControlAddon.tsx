@@ -15,6 +15,6 @@ const ControlAddon = ({
       { children }
     </span>
   )
-}
+};
 
 export default ControlAddon;

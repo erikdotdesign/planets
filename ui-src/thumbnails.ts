@@ -1,7 +1,7 @@
 import { PlanetViewer } from './planetViewer';
-import { PLANETS } from './planets'; // an array of 16 PlanetOptions or { type, textures }
+import { PLANETS } from './planets';
 
-export async function generatePlanetThumbnails() {
+export const generatePlanetThumbnails = async () => {
   const canvas = document.createElement('canvas');
   const viewer = new PlanetViewer(canvas, {
     lightMode: "neutral",
@@ -26,4 +26,4 @@ export async function generatePlanetThumbnails() {
   }
 
   return previews;
-}
+};

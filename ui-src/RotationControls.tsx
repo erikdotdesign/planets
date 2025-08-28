@@ -13,7 +13,9 @@ const RotationControls = ({
   setIncludeTilt: (includeTilt: boolean) => void;
 }) => {
   return (
-    <FieldSet label="Rotation">
+    <FieldSet 
+      label="Rotation"
+      spaceDecor>
       <Control
         label="Speed"
         type="range"

@@ -11,7 +11,9 @@ const LightingControls = ({
   setLightMode: (lighting: LightMode) => void;
 }) => {
   return (
-    <FieldSet label="Lighting">
+    <FieldSet 
+      label="Lighting"
+      spaceDecor>
       {
         ["sun", "neutral"].map((l) => (
           <Control
@@ -27,6 +29,6 @@ const LightingControls = ({
       }
     </FieldSet>
   );
-}
+};
 
 export default LightingControls;

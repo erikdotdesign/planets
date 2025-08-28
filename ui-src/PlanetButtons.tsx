@@ -28,7 +28,8 @@ const PlanetButtons = ({
           Object.keys(PLANETS).map((k) => (
             <Button
               bRef={(el: HTMLButtonElement) => ((buttonRefs.current as Record<string, HTMLButtonElement>)[k] = el)}
-              modifier={[...(planet === k ? ["radio-active"] : []), "planet", "space", "radio"]}
+              modifier={[...(planet === k ? ["radio-active"] : []), "planet", "radio"]}
+              spaceDecor
               key={k}
               onClick={() => setPlanet(k)}>
               <div
@@ -45,6 +46,6 @@ const PlanetButtons = ({
       </div>
     </div>
   );
-}
+};
 
 export default PlanetButtons;

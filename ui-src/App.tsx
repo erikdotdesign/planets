@@ -22,22 +22,15 @@ const App = () => {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const buttonRefs = useRef<Record<keyof typeof PLANETS, HTMLButtonElement | null>>({} as any);
-
   const viewerRef = usePlanetViewer(canvasRef, planetState, planetStateDispatch);
-
-  const { recording, time, start, stop, snapshot } = useRecorder(canvasRef, planetState.planet);
+  const recorderRef = useRecorder(canvasRef, planetState.planet);
 
   usePluginStorage(
     planetState, 
     planetStateDispatch, 
     viewerRef, 
     buttonRefs
-  ); 
-
-  const handleAddPlanet = () => {
-    if (planetState.playing) recording ? stop() : start();
-    else snapshot();
-  };
+  );
 
   return (
     <main className="c-app">
@@ -53,13 +46,11 @@ const App = () => {
           }} />
         <PlanetCanvas
           canvasRef={canvasRef}
-          recording={recording}
-          recordingTime={time} />
+          recorderRef={recorderRef} />
         <PlanetControls
           planetState={planetState}
           planetStateDispatch={planetStateDispatch}
-          recording={recording}
-          handleAddPlanet={handleAddPlanet} />
+          recorderRef={recorderRef} />
       </section>
     </main>
   );

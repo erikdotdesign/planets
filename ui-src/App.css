@@ -114,6 +114,11 @@
     background-color: var(--color-bg-z3);
     border-radius: 4px;
     box-shadow: 0 0 0 3px inset var(--color-bg-z0);
+    cursor: pointer;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-primary);
   }
 
   &.c-app__controls--right {
