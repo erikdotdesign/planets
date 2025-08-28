@@ -1,11 +1,11 @@
 // === Imports ===
 import sun from "./textures/sun.jpg";
 
-import mercury from "./textures/mercury.jpg";
-import mercuryBump from "./textures/mercury-bump.jpg";
+import mercury from "./textures/mercury-2k.jpg";
+// import mercuryBump from "./textures/mercury-bump.jpg";
 
-import venus from "./textures/venus.jpg";
-import venusBump from "./textures/venus-bump.jpg";
+import venus from "./textures/venus-2k.jpg";
+// import venusBump from "./textures/venus-bump.jpg";
 
 import earth from "./textures/earth.jpg";
 import earthBump from "./textures/earth-bump.jpg";
@@ -77,14 +77,14 @@ export const PLANETS: Record<string, PlanetData> = {
     type: "planet",
     radius: 1516,
     tilt: 0.03,
-    textures: makeTextures(mercury, { bump: mercuryBump }),
+    textures: makeTextures(mercury),
     rotationDirection: "prograde",
   },
   Venus: {
     type: "planet",
     radius: 3760,
     tilt: 2.64,
-    textures: makeTextures(venus, { bump: venusBump }),
+    textures: makeTextures(venus),
     rotationDirection: "retrograde",
   },
   Earth: {
