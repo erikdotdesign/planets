@@ -9,20 +9,21 @@ const Button = ({
 }: {
   children?: React.ReactNode;
   modifier?: string | string[];
-  bRef?: React.RefObject<HTMLButtonElement>;
+  bRef?: (el: HTMLButtonElement) => HTMLButtonElement | React.RefObject<HTMLButtonElement>;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   const modifierClasses = Array.isArray(modifier)
     ? modifier.map((m) => `c-button--${m}`).join(' ')
     : modifier
     ? `c-button--${modifier}`
     : '';
+  const isSpace = modifierClasses.includes("space");
   return (
     <button
       ref={bRef}
       className={`c-button ${modifierClasses}`}
       {...props}>
       {
-        modifierClasses.includes("space")
+        isSpace
         ? <>
             <div className="h-crosshair h-crosshair--top-left" />
             <div className="h-crosshair h-crosshair--top-right" />
@@ -33,7 +34,7 @@ const Button = ({
       }
       {children}
       {
-        modifierClasses.includes("space")
+        isSpace
         ? <>
             <div className="h-rule h-rule--right" />
             <div className='h-rule h-rule--bottom' />

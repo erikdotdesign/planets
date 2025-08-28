@@ -1,34 +1,21 @@
 import { useEffect, useRef } from "react";
 import { PLANETS } from "./planets";
-import { PlanetViewer, LightMode } from "./three-planet";
+import { PlanetViewer } from "./planetViewer";
+import { PlanetAction, PlanetState } from "./planetStateReducer";
 
 const usePlanetViewer = (
   canvasRef: React.RefObject<HTMLCanvasElement>, 
-  { 
-    planet, 
-    lighting, 
-    rotationSpeed, 
-    playing, 
-    showEnvironment, 
-    includeTilt, 
-    zoom, 
-    onZoomChange 
-  }: {
-    planet: string;
-    lighting: LightMode;
-    rotationSpeed: number;
-    playing: boolean;
-    showEnvironment: boolean;
-    includeTilt: boolean;
-    zoom: number;
-    onZoomChange: (zoom: number) => void;
-  }
+  planetState: PlanetState,
+  planetStateDispatch: (action: PlanetAction) => void
 ) => {
   const viewerRef = useRef<PlanetViewer | null>(null);
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    const viewer = new PlanetViewer(canvasRef.current, { lightMode: lighting, onZoomChange });
+    const viewer = new PlanetViewer(canvasRef.current, { 
+      lightMode: planetState.lightMode, 
+      onZoomChange: (zoom: number) => planetStateDispatch({ type: "SET_ZOOM", zoom })
+    });
     viewerRef.current = viewer;
     viewer.startLoop();
     return () => viewer.stopLoop();
@@ -36,18 +23,18 @@ const usePlanetViewer = (
 
   useEffect(() => {
     const v = viewerRef.current; if (!v) return;
-    const { type, textures, rotationDirection, tilt, radius } = PLANETS[planet];
+    const { type, textures, rotationDirection, tilt, radius } = PLANETS[planetState.planet];
     v.setPlanet({ type, textures, rotationDirection, tilt, radius });
-  }, [planet]);
+  }, [planetState.planet]);
 
   useEffect(() => {
     if (!viewerRef.current) return;
-    viewerRef.current.setRotationSpeed(playing ? rotationSpeed : 0);
-  }, [playing, rotationSpeed]);
+    viewerRef.current.setRotationSpeed(planetState.playing ? planetState.rotationSpeed : 0);
+  }, [planetState.playing, planetState.rotationSpeed]);
 
-  useEffect(() => { viewerRef.current?.toggleEnvironment(showEnvironment); }, [showEnvironment]);
-  useEffect(() => { viewerRef.current?.setLighting(lighting); }, [lighting]);
-  useEffect(() => { viewerRef.current?.toggleTilt(includeTilt); }, [includeTilt]);
+  useEffect(() => { viewerRef.current?.toggleEnvironment(planetState.showEnvironment); }, [planetState.showEnvironment]);
+  useEffect(() => { viewerRef.current?.setLightMode(planetState.lightMode); }, [planetState.lightMode]);
+  useEffect(() => { viewerRef.current?.toggleTilt(planetState.includeTilt); }, [planetState.includeTilt]);
 
   return viewerRef;
 };

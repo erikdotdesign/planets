@@ -1,0 +1,70 @@
+import { LightMode } from './planetViewer';
+import LightingControls from "./LightingControls";
+import RotationControls from "./RotationControls";
+import BackgroundControls from "./BackgroundControls";
+import PlayerControls from './PlayerControls';
+import { PlanetState, PlanetAction } from "./planetStateReducer";
+
+const PlanetControls = ({
+  planetState,
+  planetStateDispatch,
+  recording,
+  handleAddPlanet
+}: {
+  planetState: PlanetState;
+  planetStateDispatch: (action: PlanetAction) => void;
+  recording: boolean;
+  handleAddPlanet: () => void;
+}) => {
+  return (
+    <div className="c-app__controls c-app__controls--right">
+      <div className="c-app__control-group">
+        <LightingControls
+          lightMode={planetState.lightMode}
+          setLightMode={(lightMode: LightMode) => {
+            planetStateDispatch({
+              type: "SET_LIGHT_MODE",
+              lightMode
+            })
+          }} />
+        <RotationControls
+          rotationSpeed={planetState.rotationSpeed}
+          setRotationSpeed={(rotationSpeed: number) => {
+            planetStateDispatch({
+              type: "SET_ROTATION_SPEED",
+              rotationSpeed
+            })
+          }}
+          includeTilt={planetState.includeTilt}
+          setIncludeTilt={(includeTilt: boolean) => {
+            planetStateDispatch({
+              type: "SET_INCLUDE_TILT",
+              includeTilt
+            })
+          }} />
+        <BackgroundControls
+          showEnvironment={planetState.showEnvironment}
+          setShowEnvironment={(showEnvironment: boolean) => {
+            planetStateDispatch({
+              type: "SET_SHOW_ENVIRONMENT",
+              showEnvironment
+            })
+          }} />
+      </div>
+      <div className="c-app__control-group c-app__control-group--row c-app__control-group--fixed">
+        <PlayerControls
+          playing={planetState.playing}
+          setPlaying={(playing: boolean) => {
+            planetStateDispatch({
+              type: "SET_PLAYING",
+              playing
+            })
+          }}
+          recording={recording}
+          handleAddPlanet={handleAddPlanet} />
+      </div>
+    </div>
+  );
+}
+
+export default PlanetControls;

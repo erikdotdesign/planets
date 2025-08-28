@@ -1,14 +1,14 @@
 import { capitalize } from "./helpers";
-import { LightMode } from './three-planet';
+import { LightMode } from './planetViewer';
 import Control from "./Control";
 import FieldSet from "./FieldSet";
 
 const LightingControls = ({
-  lighting,
-  setLighting
+  lightMode,
+  setLightMode
 }: {
-  lighting: LightMode;
-  setLighting: (lighting: LightMode) => void;
+  lightMode: LightMode;
+  setLightMode: (lighting: LightMode) => void;
 }) => {
   return (
     <FieldSet label="Lighting">
@@ -19,9 +19,9 @@ const LightingControls = ({
             type="radio"
             value={l}
             name="light-mode"
-            checked={l === lighting}
+            checked={l === lightMode}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-              setLighting(e.target.value as LightMode)
+              setLightMode(e.target.value as LightMode)
             } />
         ))
       }

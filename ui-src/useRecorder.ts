@@ -1,12 +1,13 @@
 import { useRef, useState } from "react";
 
-const useRecorder = (canvasRef: React.RefObject<HTMLCanvasElement>, planet: string, setVideoUrl: any) => {
+const useRecorder = (canvasRef: React.RefObject<HTMLCanvasElement>, planet: string) => {
   const recorderRef = useRef<MediaRecorder | null>(null);
   const recordedChunksRef = useRef<BlobPart[]>([]);
   const stillImageDataUrl = useRef<string>("");
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [recording, setRecording] = useState(false);
   const [time, setTime] = useState(0);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
 
   const start = () => {
     if (!canvasRef.current) return;
@@ -29,11 +30,11 @@ const useRecorder = (canvasRef: React.RefObject<HTMLCanvasElement>, planet: stri
       recorderRef.current.onstop = () => {
         const videoBlob = new Blob(recordedChunksRef.current, { type: "video/webm" });
 
-        // console.log("Video size in MB:", videoBlob.size / (1024 * 1024));
+        console.log("Video size in MB:", videoBlob.size / (1024 * 1024));
 
         // // Dev preview
-        // const url = URL.createObjectURL(videoBlob);
-        // setVideoUrl(url);
+        const url = URL.createObjectURL(videoBlob);
+        setVideoUrl(url);
 
         const reader = new FileReader();
         reader.onload = () => {
@@ -66,7 +67,7 @@ const useRecorder = (canvasRef: React.RefObject<HTMLCanvasElement>, planet: stri
     } }, "*");
   };
 
-  return { recording, time, start, stop, snapshot };
+  return { recording, time, start, stop, snapshot, videoUrl };
 };
 
 export default useRecorder;

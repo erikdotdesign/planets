@@ -113,7 +113,7 @@ export class PlanetViewer {
     if (controls && !headless) this.initControls(onZoomChange);
     if (environment) this.createEnvironment();
 
-    this.setLighting(lightMode);
+    this.setLightMode(lightMode);
 
     if (!headless) this.initResizeObserver(host);
   }
@@ -178,7 +178,7 @@ export class PlanetViewer {
   }
 
   // === Lighting ===
-  setLighting(mode: LightMode) {
+  setLightMode(mode: LightMode) {
     this.scene.remove(this.lightGroup);
     this.lightGroup.clear();
 

@@ -1,4 +1,4 @@
-import { PlanetViewer } from './three-planet';
+import { PlanetViewer } from './planetViewer';
 import { PLANETS } from './planets'; // an array of 16 PlanetOptions or { type, textures }
 
 export async function generatePlanetThumbnails() {
