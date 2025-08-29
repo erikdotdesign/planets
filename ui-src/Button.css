@@ -151,7 +151,8 @@
   background-size: 48px 48px;
   background-position: -12px -12px;
 
-  &.c-button__planet--saturn {
+  &.c-button__planet--saturn,
+  &.c-button__planet--haumea {
     background-size: 24px 24px;
     background-position: initial;
   }

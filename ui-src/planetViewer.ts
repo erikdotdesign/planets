@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-import { TextureMap, PlanetryObject } from "./planets";
+import { TextureMap, PLANETS } from "./planets";
 
 // Environment textures
 import envNx from "./textures/environment/nx.png";
@@ -22,7 +22,7 @@ const RING_INNER_RADIUS = 1.2;
 const RING_OUTER_RADIUS = 2.5;
 
 export type PlanetOptions = {
-  type: PlanetryObject;
+  planet: keyof typeof PLANETS;
   textures: TextureMap;
   radius?: number;
   tilt?: number;
@@ -267,7 +267,7 @@ export class PlanetViewer {
   }
 
   async setPlanet(opts: PlanetOptions) {
-    const { type, textures, rotationDirection = "prograde", tilt = 0, radius = 1 } = opts;
+    const { planet, textures, rotationDirection = "prograde", tilt = 0, radius = 1 } = opts;
     this.currentRotationDirection = rotationDirection;
 
     const [baseTex, bumpTex, specTex, atmTex, atmAlpha, ringTex] =
@@ -288,7 +288,7 @@ export class PlanetViewer {
     // Planet sphere
     const geom = new THREE.SphereGeometry(PLANET_RADIUS, 96, 96);
     let mat: THREE.Material;
-    if (type === "star") {
+    if (planet === "Sun") {
       mat = new THREE.MeshBasicMaterial({
         map: baseTex,
         toneMapped: false,
@@ -305,6 +305,11 @@ export class PlanetViewer {
       });
     }
     this.sphere = new THREE.Mesh(geom, mat);
+    
+    if (planet === "Haumea") {
+      this.sphere.scale.set(2.26, 1.66, 1.0);
+    }
+
     this.baseTilt = degreesToRadians(tilt);
     this.sphere.rotation.x = this.tiltEnabled ? this.baseTilt * -1 : 0;
     this.scene.add(this.sphere);

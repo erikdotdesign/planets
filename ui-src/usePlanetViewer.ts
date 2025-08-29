@@ -23,8 +23,14 @@ const usePlanetViewer = (
 
   useEffect(() => {
     const v = viewerRef.current; if (!v) return;
-    const { type, textures, rotationDirection, tilt, radius } = PLANETS[planetState.planet];
-    v.setPlanet({ type, textures, rotationDirection, tilt, radius });
+    const { textures, rotationDirection, tilt, radius } = PLANETS[planetState.planet];
+    v.setPlanet({ 
+      planet: planetState.planet, 
+      textures, 
+      rotationDirection, 
+      tilt, 
+      radius 
+    });
   }, [planetState.planet]);
 
   useEffect(() => {
@@ -32,10 +38,21 @@ const usePlanetViewer = (
     viewerRef.current.setRotationSpeed(planetState.playing ? planetState.rotationSpeed : 0);
   }, [planetState.playing, planetState.rotationSpeed]);
 
-  useEffect(() => { viewerRef.current?.toggleEnvironment(planetState.showEnvironment); }, [planetState.showEnvironment]);
-  useEffect(() => { viewerRef.current?.toggleAtmosphere(planetState.showAtmosphere); }, [planetState.showAtmosphere]);
-  useEffect(() => { viewerRef.current?.setLightMode(planetState.lightMode); }, [planetState.lightMode]);
-  useEffect(() => { viewerRef.current?.toggleTilt(planetState.includeTilt); }, [planetState.includeTilt]);
+  useEffect(() => { 
+    viewerRef.current?.toggleEnvironment(planetState.showEnvironment); 
+  }, [planetState.showEnvironment]);
+
+  useEffect(() => { 
+    viewerRef.current?.toggleAtmosphere(planetState.showAtmosphere); 
+  }, [planetState.showAtmosphere]);
+
+  useEffect(() => { 
+    viewerRef.current?.setLightMode(planetState.lightMode); 
+  }, [planetState.lightMode]);
+
+  useEffect(() => { 
+    viewerRef.current?.toggleTilt(planetState.includeTilt); 
+  }, [planetState.includeTilt]);
 
   return viewerRef;
 };
