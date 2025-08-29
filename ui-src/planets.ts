@@ -2,20 +2,20 @@
 import sun from "./textures/sun.jpg";
 
 import mercury from "./textures/mercury-2k.jpg";
-import mercuryBump from "./textures/mercury-bump.jpg";
+import mercuryBump from "./textures/mercury-bump-2k.jpg";
 
 import venus from "./textures/venus-2k.jpg";
 import venusClouds from "./textures/venus-clouds-2k.jpg";
-import venusBump from "./textures/venus-bump.jpg";
+import venusBump from "./textures/venus-bump-2k.jpg";
 
-import earth from "./textures/earth.jpg";
-import earthBump from "./textures/earth-bump.jpg";
-import earthSpec from "./textures/earth-specular.jpg";
+import earth from "./textures/earth-2k.jpg";
+import earthBump from "./textures/earth-bump-2k.jpg";
+import earthSpec from "./textures/earth-specular-2k.jpg";
 import earthClouds from "./textures/earth-clouds-2k.png";
 import earthCloudsAlpha from "./textures/earth-clouds-alpha-2k.jpg";
 
-import moon from "./textures/moon.jpg";
-import moonBump from "./textures/moon-bump.jpg";
+import moon from "./textures/moon-2k.jpg";
+import moonBump from "./textures/moon-bump-2k.jpg";
 
 import mars from "./textures/mars.jpg";
 import marsBump from "./textures/mars-bump.jpg";
@@ -27,19 +27,39 @@ import saturnRing from "./textures/saturn-ring.png";
 
 import uranus from "./textures/uranus.jpg";
 import neptune from "./textures/neptune.jpg";
+
 import pluto from "./textures/pluto.jpg";
+import plutoBump from "./textures/pluto-bump.jpg";
 
 import ganymede from "./textures/ganymede.jpg";
+import ganymedeBump from "./textures/ganymede-bump.jpg";
+
 import titan from "./textures/titan.webp";
+import titanBump from "./textures/titan-bump.jpg";
+
 import callisto from "./textures/callisto.jpg";
+import callistoBump from "./textures/callisto-bump.jpg";
+
 import io from "./textures/io.jpg";
-import europa from "./textures/europa.jpg";
+import ioBump from "./textures/io-bump.jpg";
+
+import europa from "./textures/europa-2k.jpg";
+import europaBump from "./textures/europa-bump-2k.jpg";
+
 import triton from "./textures/triton.jpg";
+import tritonBump from "./textures/triton-bump.jpg";
 
 import ceres from "./textures/ceres.jpg";
+import ceresBump from "./textures/ceres-bump.jpg";
+
 import haumea from "./textures/haumea.jpg";
+import haumeaBump from "./textures/haumea-bump.jpg";
+
 import makemake from "./textures/makemake.jpg";
+import makemakeBump from "./textures/makemake-bump.jpg";
+
 import eris from "./textures/eris.jpg";
+import erisBump from "./textures/eris-bump.jpg";
 
 // === Types ===
 export type PlanetryObject = "star" | "planet" | "dwarf-planet" | "moon";
@@ -151,77 +171,77 @@ export const PLANETS: Record<string, PlanetData> = {
     type: "dwarf-planet",
     radius: 738.38,
     tilt: 122.5,
-    textures: makeTextures(pluto),
+    textures: makeTextures(pluto, { bump: plutoBump }),
     rotationDirection: "retrograde",
   },
   Ganymede: {
     type: "moon",
     radius: 2634,
     tilt: 3.33,
-    textures: makeTextures(ganymede),
+    textures: makeTextures(ganymede, { bump: ganymedeBump }),
     rotationDirection: "prograde"  // "synchronous",
   },
   Titan: {
     type: "moon",
     radius: 2574,
     tilt: 27,
-    textures: makeTextures(titan),
+    textures: makeTextures(titan, { bump: titanBump }),
     rotationDirection: "prograde" // "synchronous",
   },
   Callisto: {
     type: "moon",
     radius: 2410,
     tilt: 0,
-    textures: makeTextures(callisto),
+    textures: makeTextures(callisto, { bump: callistoBump }),
     rotationDirection: "prograde" // "synchronous",
   },
   Io: {
     type: "moon",
     radius: 1821,
     tilt: 0.05,
-    textures: makeTextures(io),
+    textures: makeTextures(io, { bump: ioBump }),
     rotationDirection: "prograde" // "synchronous",
   },
   Europa: {
     type: "moon",
     radius: 1560,
     tilt: 0.47,
-    textures: makeTextures(europa),
+    textures: makeTextures(europa, { bump: europaBump }),
     rotationDirection: "prograde" // "synchronous",
   },
   Triton: {
     type: "moon",
     radius: 1353,
     tilt: 156,
-    textures: makeTextures(triton),
+    textures: makeTextures(triton, { bump: tritonBump }),
     rotationDirection: "retrograde",
   },
   Ceres: {
     type: "dwarf-planet",
     radius: 293.91,
     tilt: 4,
-    textures: makeTextures(ceres),
+    textures: makeTextures(ceres, { bump: ceresBump }),
     rotationDirection: "prograde"
   },
   Haumea: {
     type: "dwarf-planet",
     radius: 507.04,
     tilt: 126,
-    textures: makeTextures(haumea),
+    textures: makeTextures(haumea, { bump: haumeaBump }),
     rotationDirection: "prograde"
   },
   Makemake: {
     type: "dwarf-planet",
     radius: 444.28,
     tilt: 29,
-    textures: makeTextures(makemake),
+    textures: makeTextures(makemake, { bump: makemakeBump }),
     rotationDirection: "prograde"
   },
   Eris: {
     type: "dwarf-planet",
     radius: 722.65,
     tilt: 44,
-    textures: makeTextures(eris),
+    textures: makeTextures(eris, { bump: erisBump }),
     rotationDirection: "prograde"
   },
 };
