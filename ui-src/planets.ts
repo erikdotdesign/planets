@@ -1,21 +1,21 @@
 // === Imports ===
 import sun from "./textures/sun.jpg";
 
-import mercury from "./textures/mercury-2k.jpg";
-import mercuryBump from "./textures/mercury-bump-2k.jpg";
+import mercury from "./textures/mercury.jpg";
+import mercuryBump from "./textures/mercury-bump.jpg";
 
-import venus from "./textures/venus-2k.jpg";
-import venusClouds from "./textures/venus-clouds-2k.jpg";
-import venusBump from "./textures/venus-bump-2k.jpg";
+import venus from "./textures/venus.jpg";
+import venusClouds from "./textures/venus-clouds.jpg";
+import venusBump from "./textures/venus-bump.jpg";
 
-import earth from "./textures/earth-2k.jpg";
-import earthBump from "./textures/earth-bump-2k.jpg";
-import earthSpec from "./textures/earth-specular-2k.jpg";
-import earthClouds from "./textures/earth-clouds-2k.png";
-import earthCloudsAlpha from "./textures/earth-clouds-alpha-2k.jpg";
+import earth from "./textures/earth.jpg";
+import earthBump from "./textures/earth-bump.jpg";
+import earthSpec from "./textures/earth-specular.jpg";
+import earthClouds from "./textures/earth-clouds.png";
+import earthCloudsAlpha from "./textures/earth-clouds-alpha.jpg";
 
-import moon from "./textures/moon-2k.jpg";
-import moonBump from "./textures/moon-bump-2k.jpg";
+import moon from "./textures/moon.jpg";
+import moonBump from "./textures/moon-bump.jpg";
 
 import mars from "./textures/mars.jpg";
 import marsBump from "./textures/mars-bump.jpg";
@@ -43,8 +43,8 @@ import callistoBump from "./textures/callisto-bump.jpg";
 import io from "./textures/io.jpg";
 import ioBump from "./textures/io-bump.jpg";
 
-import europa from "./textures/europa-2k.jpg";
-import europaBump from "./textures/europa-bump-2k.jpg";
+import europa from "./textures/europa.jpg";
+import europaBump from "./textures/europa-bump.jpg";
 
 import triton from "./textures/triton.jpg";
 import tritonBump from "./textures/triton-bump.jpg";
