@@ -38,6 +38,7 @@ export interface ViewerOptions {
   height?: number;
   lightMode?: LightMode;
   environment?: boolean;
+  atmosphere?: boolean;
   controls?: boolean;
   onZoomChange?: (zoom: number) => void; // <── new
 }
@@ -88,10 +89,11 @@ export class PlanetViewer {
   private frameId?: number;
   private start = performance.now();
 
-  private tiltEnabled = true; // new flag
-  private baseTilt: number = 0; // store the original tilt
+  private tiltEnabled = true;
+  private baseTilt: number = 0;
   private rotationSpeed = 0.5;
   private showEnvironment = true;
+  private showAtmosphere = true;
   private currentRotationDirection: "prograde" | "retrograde" | "synchronous" = "prograde";
 
   private lightGroup = new THREE.Group();
@@ -104,6 +106,7 @@ export class PlanetViewer {
       lightMode = "sun",
       environment = true,
       controls = true,
+      atmosphere = true,
       onZoomChange
     } = opts;
 
@@ -112,6 +115,8 @@ export class PlanetViewer {
 
     if (controls && !headless) this.initControls(onZoomChange);
     if (environment) this.createEnvironment();
+
+    this.showAtmosphere = atmosphere;
 
     this.setLightMode(lightMode);
 
@@ -213,6 +218,12 @@ export class PlanetViewer {
       : null;
   }
 
+  toggleAtmosphere(show: boolean) {
+    if (this.atmosphere) {
+      this.atmosphere.visible = show;
+    }
+  }
+
   toggleTilt(enabled: boolean) {
     this.tiltEnabled = enabled;
     if (!this.sphere) return;
@@ -297,7 +308,7 @@ export class PlanetViewer {
     this.scene.add(this.sphere);
 
     // Atmosphere
-    if (atmTex) {
+    if (atmTex && this.showAtmosphere) {
       const atmGeom = new THREE.SphereGeometry(PLANET_RADIUS * 1.02, 96, 96);
       const atmMat = new THREE.MeshPhongMaterial({
         map: atmTex,

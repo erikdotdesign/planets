@@ -3,7 +3,7 @@ import { PlanetState, PlanetAction } from "./planetStateReducer";
 import { Recorder } from './useRecorder';
 import LightingControls from "./LightingControls";
 import RotationControls from "./RotationControls";
-import BackgroundControls from "./BackgroundControls";
+import LayerControls from "./LayerControls";
 import PlayerControls from './PlayerControls';
 
 const PlanetControls = ({
@@ -41,12 +41,19 @@ const PlanetControls = ({
               includeTilt
             })
           }} />
-        <BackgroundControls
+        <LayerControls
           showEnvironment={planetState.showEnvironment}
           setShowEnvironment={(showEnvironment: boolean) => {
             planetStateDispatch({
               type: "SET_SHOW_ENVIRONMENT",
               showEnvironment
+            })
+          }}
+          showAtmosphere={planetState.showAtmosphere}
+          setShowAtmosphere={(showAtmosphere: boolean) => {
+            planetStateDispatch({
+              type: "SET_SHOW_ATMOSPHERE",
+              showAtmosphere
             })
           }} />
       </div>

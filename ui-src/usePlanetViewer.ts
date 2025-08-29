@@ -33,6 +33,7 @@ const usePlanetViewer = (
   }, [planetState.playing, planetState.rotationSpeed]);
 
   useEffect(() => { viewerRef.current?.toggleEnvironment(planetState.showEnvironment); }, [planetState.showEnvironment]);
+  useEffect(() => { viewerRef.current?.toggleAtmosphere(planetState.showAtmosphere); }, [planetState.showAtmosphere]);
   useEffect(() => { viewerRef.current?.setLightMode(planetState.lightMode); }, [planetState.lightMode]);
   useEffect(() => { viewerRef.current?.toggleTilt(planetState.includeTilt); }, [planetState.includeTilt]);
 

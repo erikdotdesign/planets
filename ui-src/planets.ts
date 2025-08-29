@@ -5,6 +5,7 @@ import mercury from "./textures/mercury-2k.jpg";
 // import mercuryBump from "./textures/mercury-bump.jpg";
 
 import venus from "./textures/venus-2k.jpg";
+import venusClouds from "./textures/venus-clouds-2k.jpg";
 // import venusBump from "./textures/venus-bump.jpg";
 
 import earth from "./textures/earth.jpg";
@@ -84,7 +85,7 @@ export const PLANETS: Record<string, PlanetData> = {
     type: "planet",
     radius: 3760,
     tilt: 2.64,
-    textures: makeTextures(venus),
+    textures: makeTextures(venus, { atmosphere: venusClouds }),
     rotationDirection: "retrograde",
   },
   Earth: {
