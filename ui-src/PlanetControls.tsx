@@ -42,6 +42,7 @@ const PlanetControls = ({
             })
           }} />
         <LayerControls
+          planet={planetState.planet}
           showEnvironment={planetState.showEnvironment}
           setShowEnvironment={(showEnvironment: boolean) => {
             planetStateDispatch({

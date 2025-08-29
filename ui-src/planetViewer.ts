@@ -219,6 +219,7 @@ export class PlanetViewer {
   }
 
   toggleAtmosphere(show: boolean) {
+    this.showAtmosphere = show;
     if (this.atmosphere) {
       this.atmosphere.visible = show;
     }
@@ -291,6 +292,7 @@ export class PlanetViewer {
       mat = new THREE.MeshBasicMaterial({
         map: baseTex,
         toneMapped: false,
+        lightMapIntensity: 2,
         color: new THREE.Color(2.5, 2.5, 2.5),
       });
     } else {
@@ -308,7 +310,7 @@ export class PlanetViewer {
     this.scene.add(this.sphere);
 
     // Atmosphere
-    if (atmTex && this.showAtmosphere) {
+    if (atmTex) {
       const atmGeom = new THREE.SphereGeometry(PLANET_RADIUS * 1.02, 96, 96);
       const atmMat = new THREE.MeshPhongMaterial({
         map: atmTex,
@@ -318,6 +320,7 @@ export class PlanetViewer {
         side: THREE.DoubleSide
       });
       this.atmosphere = new THREE.Mesh(atmGeom, atmMat);
+      this.atmosphere.visible = this.showAtmosphere;
       this.sphere.add(this.atmosphere);
     }
 

@@ -309,6 +309,11 @@
       }
     }
   }
+
+  &.c-control--disabled {
+    opacity: 0.25;
+    cursor: not-allowed !important;
+  }
 }
 
 .c-control__label {
