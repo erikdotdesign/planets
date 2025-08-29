@@ -2,11 +2,11 @@
 import sun from "./textures/sun.jpg";
 
 import mercury from "./textures/mercury-2k.jpg";
-// import mercuryBump from "./textures/mercury-bump.jpg";
+import mercuryBump from "./textures/mercury-bump.jpg";
 
 import venus from "./textures/venus-2k.jpg";
 import venusClouds from "./textures/venus-clouds-2k.jpg";
-// import venusBump from "./textures/venus-bump.jpg";
+import venusBump from "./textures/venus-bump.jpg";
 
 import earth from "./textures/earth.jpg";
 import earthBump from "./textures/earth-bump.jpg";
@@ -36,8 +36,13 @@ import io from "./textures/io.jpg";
 import europa from "./textures/europa.jpg";
 import triton from "./textures/triton.jpg";
 
+import ceres from "./textures/ceres.jpg";
+import haumea from "./textures/haumea.jpg";
+import makemake from "./textures/makemake.jpg";
+import eris from "./textures/eris.jpg";
+
 // === Types ===
-export type PlanetryObject = "star" | "planet" | "moon";
+export type PlanetryObject = "star" | "planet" | "dwarf-planet" | "moon";
 
 export type TextureMap = {
   map: string;
@@ -78,14 +83,14 @@ export const PLANETS: Record<string, PlanetData> = {
     type: "planet",
     radius: 1516,
     tilt: 0.03,
-    textures: makeTextures(mercury),
+    textures: makeTextures(mercury, {bump: mercuryBump}),
     rotationDirection: "prograde",
   },
   Venus: {
     type: "planet",
     radius: 3760,
     tilt: 2.64,
-    textures: makeTextures(venus, { atmosphere: venusClouds }),
+    textures: makeTextures(venus, { bump: venusBump, atmosphere: venusClouds }),
     rotationDirection: "retrograde",
   },
   Earth: {
@@ -143,7 +148,7 @@ export const PLANETS: Record<string, PlanetData> = {
     rotationDirection: "prograde",
   },
   Pluto: {
-    type: "planet",
+    type: "dwarf-planet",
     radius: 738.38,
     tilt: 122.5,
     textures: makeTextures(pluto),
@@ -190,5 +195,33 @@ export const PLANETS: Record<string, PlanetData> = {
     tilt: 156,
     textures: makeTextures(triton),
     rotationDirection: "retrograde",
+  },
+  Ceres: {
+    type: "dwarf-planet",
+    radius: 293.91,
+    tilt: 4,
+    textures: makeTextures(ceres),
+    rotationDirection: "prograde"
+  },
+  Haumea: {
+    type: "dwarf-planet",
+    radius: 507.04,
+    tilt: 126,
+    textures: makeTextures(haumea),
+    rotationDirection: "prograde"
+  },
+  Makemake: {
+    type: "dwarf-planet",
+    radius: 444.28,
+    tilt: 29,
+    textures: makeTextures(makemake),
+    rotationDirection: "prograde"
+  },
+  Eris: {
+    type: "dwarf-planet",
+    radius: 722.65,
+    tilt: 44,
+    textures: makeTextures(eris),
+    rotationDirection: "prograde"
   },
 };

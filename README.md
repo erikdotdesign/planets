@@ -5,8 +5,8 @@ Export still images or looping videos of celestial objects with full control ove
 
 ## Features  
 
-- **17 celestial models** included:  
-  Sun, Mercury, Venus, Earth, Moon, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, Ganymede, Titan, Callisto, Io, Europa, Triton  
+- **21 celestial models** included:  
+  Sun, Mercury, Venus, Earth, Moon, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, Ganymede, Titan, Callisto, Io, Europa, Triton, Ceres, Haumea, Makemake, Eris
 
 - **Controls for realism & style**  
   - Lighting intensity & direction  
