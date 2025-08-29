@@ -292,7 +292,6 @@ export class PlanetViewer {
       mat = new THREE.MeshBasicMaterial({
         map: baseTex,
         toneMapped: false,
-        lightMapIntensity: 2,
         color: new THREE.Color(2.5, 2.5, 2.5),
       });
     } else {
@@ -305,10 +304,6 @@ export class PlanetViewer {
       });
     }
     this.sphere = new THREE.Mesh(geom, mat);
-    
-    if (planet === "Haumea") {
-      this.sphere.scale.set(2.26, 1.66, 1.0);
-    }
 
     this.baseTilt = degreesToRadians(tilt);
     this.sphere.rotation.x = this.tiltEnabled ? this.baseTilt * -1 : 0;
@@ -334,6 +329,11 @@ export class PlanetViewer {
       this.ring = this.createRingMesh(ringTex);
       this.scene.add(this.ring);
       this.ring.rotation.x = Math.PI / 2 - (this.tiltEnabled ? this.baseTilt : 0);
+    }
+
+    // Haumea egg shape
+    if (planet === "Haumea") {
+      this.sphere.scale.set(2.26, 1.66, 1.0);
     }
   }
 
