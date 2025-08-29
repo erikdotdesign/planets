@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { EffectComposer, EffectPass, RenderPass, SelectiveBloomEffect } from "postprocessing";
 
 import { TextureMap, PLANETS } from "./planets";
 
@@ -12,14 +13,10 @@ import envPy from "./textures/environment/py.png";
 import envPz from "./textures/environment/pz.png";
 
 const ENVIRONMENT_TEXTURES = [envPx, envNx, envPy, envNy, envPz, envNz];
-
-// === Config Constants ===
 const CAMERA_FOV = 45;
 const CAMERA_NEAR = 0.1;
 const CAMERA_FAR = 1000;
 const PLANET_RADIUS = 1;
-const RING_INNER_RADIUS = 1.2;
-const RING_OUTER_RADIUS = 2.5;
 
 export type PlanetOptions = {
   planet: keyof typeof PLANETS;
@@ -40,46 +37,16 @@ export interface ViewerOptions {
   environment?: boolean;
   atmosphere?: boolean;
   controls?: boolean;
-  onZoomChange?: (zoom: number) => void; // <── new
+  onZoomChange?: (zoom: number) => void;
 }
 
-// === Helpers ===
-const loadTexture = (url?: string): Promise<THREE.Texture | undefined> => {
-  if (!url) return Promise.resolve(undefined);
-  return new Promise<THREE.Texture>((resolve, reject) => {
-    new THREE.TextureLoader().load(
-      url,
-      (tex) => {
-        tex.colorSpace = THREE.SRGBColorSpace;
-        resolve(tex);
-      },
-      undefined,
-      reject
-    );
-  });
-}
-
-const disposeAndRemove = (scene: THREE.Scene, mesh?: THREE.Mesh) => {
-  if (!mesh) return;
-  (mesh.material as THREE.Material).dispose();
-  (mesh.geometry as THREE.BufferGeometry).dispose();
-  scene.remove(mesh);
-}
-
-const degreesToRadians = (degrees: number): number => {
-  return (Math.PI * degrees) / 180;
-};
-
-// === Class ===
 export class PlanetViewer {
   private scene = new THREE.Scene();
-  private camera = new THREE.PerspectiveCamera(
-    CAMERA_FOV,
-    1,
-    CAMERA_NEAR,
-    CAMERA_FAR
-  );
+  private camera = new THREE.PerspectiveCamera(CAMERA_FOV, 1, CAMERA_NEAR, CAMERA_FAR);
   private renderer: THREE.WebGLRenderer;
+
+  private composer?: EffectComposer;
+  private bloomEffect?: SelectiveBloomEffect;
 
   private sphere?: THREE.Mesh;
   private atmosphere?: THREE.Mesh;
@@ -107,47 +74,37 @@ export class PlanetViewer {
       environment = true,
       controls = true,
       atmosphere = true,
-      onZoomChange
     } = opts;
 
-    this.renderer = this.initRenderer(host, width, height);
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: host,
+      antialias: true,
+      alpha: true,
+      preserveDrawingBuffer: true,
+    });
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.setSize(width, height, false);
+
     this.initCamera(width, height);
-
-    if (controls && !headless) this.initControls(onZoomChange);
+    if (controls && !headless) this.initControls();
     if (environment) this.createEnvironment();
-
     this.showAtmosphere = atmosphere;
 
+    this.initComposer(width, height);
     this.setLightMode(lightMode);
 
     if (!headless) this.initResizeObserver(host);
   }
 
   // === Initialization ===
-  private initRenderer(
-    host: HTMLCanvasElement,
-    width: number,
-    height: number
-  ): THREE.WebGLRenderer {
-    const renderer = new THREE.WebGLRenderer({
-      canvas: host,
-      antialias: true,
-      alpha: true,
-      preserveDrawingBuffer: true,
-    });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(width, height, false);
-    return renderer;
-  }
-
   private initCamera(width: number, height: number) {
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
-    this.camera.position.set(5, 1, 0.5); // slight angle
+    this.camera.position.set(5, 1, 0.5);
     this.camera.lookAt(0, 0, 0);
   }
 
-  private initControls(onZoomChange?: (zoom: number) => void) {
+  private initControls() {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.1;
@@ -155,13 +112,6 @@ export class PlanetViewer {
     this.controls.enableZoom = true;
     this.controls.minDistance = 1.5;
     this.controls.maxDistance = 10;
-    
-    if (onZoomChange) {
-      this.controls.addEventListener("change", () => {
-        const zoom = this.camera.position.distanceTo(this.controls!.target);
-        onZoomChange(zoom);
-      });
-    }
   }
 
   private initResizeObserver(host: HTMLCanvasElement) {
@@ -170,19 +120,28 @@ export class PlanetViewer {
       this.camera.aspect = w / h;
       this.camera.updateProjectionMatrix();
       this.renderer.setSize(w, h, false);
+      this.composer?.setSize(w, h);
     };
-    const ro = new ResizeObserver(onResize);
-    ro.observe(host);
+    new ResizeObserver(onResize).observe(host);
   }
 
-  setZoomLevel(distance: number) {
-    const dir = new THREE.Vector3();
-    this.camera.getWorldDirection(dir);
-    this.camera.position.copy(dir.multiplyScalar(-distance));
-    this.camera.updateProjectionMatrix();
+  private initComposer(width: number, height: number) {
+    this.composer = new EffectComposer(this.renderer, { multisampling: 4 });
+    const renderPass = new RenderPass(this.scene, this.camera);
+
+    this.bloomEffect = new SelectiveBloomEffect(this.scene, this.camera, {
+      mipmapBlur: true,
+      luminanceThreshold: 0.0,
+      intensity: 2.0,
+      radius: 0.5,
+    });
+
+    const effectPass = new EffectPass(this.camera, this.bloomEffect);
+    this.composer.addPass(renderPass);
+    this.composer.addPass(effectPass);
+    this.composer.setSize(width, height);
   }
 
-  // === Lighting ===
   setLightMode(mode: LightMode) {
     this.scene.remove(this.lightGroup);
     this.lightGroup.clear();
@@ -213,16 +172,12 @@ export class PlanetViewer {
 
   toggleEnvironment(show: boolean) {
     this.showEnvironment = show;
-    this.scene.background = show
-      ? new THREE.CubeTextureLoader().load(ENVIRONMENT_TEXTURES)
-      : null;
+    this.scene.background = show ? new THREE.CubeTextureLoader().load(ENVIRONMENT_TEXTURES) : null;
   }
 
   toggleAtmosphere(show: boolean) {
     this.showAtmosphere = show;
-    if (this.atmosphere) {
-      this.atmosphere.visible = show;
-    }
+    if (this.atmosphere) this.atmosphere.visible = show;
   }
 
   toggleTilt(enabled: boolean) {
@@ -230,19 +185,37 @@ export class PlanetViewer {
     if (!this.sphere) return;
 
     this.sphere.rotation.x = enabled ? this.baseTilt * -1 : 0;
-
-    if (this.ring) {
-      this.ring.rotation.x = Math.PI / 2 - (enabled ? this.baseTilt : 0);
-    }
+    if (this.ring) this.ring.rotation.x = Math.PI / 2 - (enabled ? this.baseTilt : 0);
   }
 
-  // === Planet Setup ===
+  private degreesToRadians(deg: number) {
+    return (Math.PI * deg) / 180;
+  }
+
+  private async loadTexture(url?: string) {
+    if (!url) return undefined;
+    return new Promise<THREE.Texture>((resolve, reject) => {
+      new THREE.TextureLoader().load(
+        url,
+        (tex) => {
+          tex.colorSpace = THREE.SRGBColorSpace;
+          resolve(tex);
+        },
+        undefined,
+        reject
+      );
+    });
+  }
+
+  private disposeAndRemove(mesh?: THREE.Mesh) {
+    if (!mesh) return;
+    (mesh.material as THREE.Material).dispose();
+    (mesh.geometry as THREE.BufferGeometry).dispose();
+    this.scene.remove(mesh);
+  }
+
   private createRingMesh(texture: THREE.Texture): THREE.Mesh {
-    const ringGeometry = new THREE.RingGeometry(
-      RING_INNER_RADIUS,
-      RING_OUTER_RADIUS,
-      128
-    );
+    const ringGeometry = new THREE.RingGeometry(1.2, 2.5, 128);
     const pos = ringGeometry.attributes.position;
     const uv = ringGeometry.attributes.uv;
 
@@ -250,7 +223,7 @@ export class PlanetViewer {
       const x = pos.getX(i);
       const y = pos.getY(i);
       const r = Math.sqrt(x * x + y * y);
-      uv.setXY(i, (r - RING_INNER_RADIUS) / (RING_OUTER_RADIUS - RING_INNER_RADIUS), 0.5);
+      uv.setXY(i, (r - 1.2) / (2.5 - 1.2), 0.5);
     }
     uv.needsUpdate = true;
 
@@ -272,20 +245,18 @@ export class PlanetViewer {
 
     const [baseTex, bumpTex, specTex, atmTex, atmAlpha, ringTex] =
       await Promise.all([
-        loadTexture(textures.map),
-        loadTexture(textures.bump),
-        loadTexture(textures.specular),
-        loadTexture(textures.atmosphere),
-        loadTexture(textures.atmosphereAlpha),
-        loadTexture(textures.ring),
+        this.loadTexture(textures.map),
+        this.loadTexture(textures.bump),
+        this.loadTexture(textures.specular),
+        this.loadTexture(textures.atmosphere),
+        this.loadTexture(textures.atmosphereAlpha),
+        this.loadTexture(textures.ring),
       ]);
 
-    // Clean up old
-    disposeAndRemove(this.scene, this.sphere);
-    disposeAndRemove(this.scene, this.atmosphere);
-    disposeAndRemove(this.scene, this.ring);
+    this.disposeAndRemove(this.sphere);
+    this.disposeAndRemove(this.atmosphere);
+    this.disposeAndRemove(this.ring);
 
-    // Planet sphere
     const geom = new THREE.SphereGeometry(PLANET_RADIUS, 96, 96);
     let mat: THREE.Material;
     if (planet === "Sun") {
@@ -303,11 +274,16 @@ export class PlanetViewer {
         shininess: specTex ? 5 : 0,
       });
     }
-    this.sphere = new THREE.Mesh(geom, mat);
 
-    this.baseTilt = degreesToRadians(tilt);
+    this.sphere = new THREE.Mesh(geom, mat);
+    this.baseTilt = this.degreesToRadians(tilt);
     this.sphere.rotation.x = this.tiltEnabled ? this.baseTilt * -1 : 0;
     this.scene.add(this.sphere);
+
+    // Apply bloom only to Sun
+    if (planet === "Sun" && this.bloomEffect) {
+      this.bloomEffect.selection.add(this.sphere);
+    }
 
     // Atmosphere
     if (atmTex) {
@@ -317,7 +293,7 @@ export class PlanetViewer {
         alphaMap: atmAlpha,
         transparent: true,
         depthWrite: false,
-        side: THREE.DoubleSide
+        side: THREE.DoubleSide,
       });
       this.atmosphere = new THREE.Mesh(atmGeom, atmMat);
       this.atmosphere.visible = this.showAtmosphere;
@@ -356,7 +332,7 @@ export class PlanetViewer {
       }
 
       this.controls?.update();
-      this.renderer.render(this.scene, this.camera);
+      this.composer?.render();
       this.frameId = requestAnimationFrame(tick);
     };
     if (!this.frameId) this.frameId = requestAnimationFrame(tick);
@@ -370,11 +346,10 @@ export class PlanetViewer {
     this.rotationSpeed = 0;
   }
 
-  // === Utilities ===
   async renderOnce(): Promise<string> {
     return new Promise((resolve) => {
       requestAnimationFrame(() => {
-        this.renderer.render(this.scene, this.camera);
+        this.composer?.render();
         resolve(this.renderer.domElement.toDataURL("image/png"));
       });
     });
