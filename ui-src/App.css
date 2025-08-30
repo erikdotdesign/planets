@@ -124,6 +124,7 @@
   &.c-app__controls--right {
     padding: 20px 16px;
     min-width: 136px;
+    overflow: hidden !important;
   }
 }
 
