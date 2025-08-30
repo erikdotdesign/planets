@@ -16,6 +16,7 @@ const App = () => {
     rotationSpeed: 0.2,
     showEnvironment: true,
     showAtmosphere: true,
+    showElevation: true,
     includeTilt: true,
     lightMode: "sun",
     zoom: 5

@@ -7,15 +7,20 @@ const LayerControls = ({
   showEnvironment,
   setShowEnvironment,
   showAtmosphere,
-  setShowAtmosphere
+  setShowAtmosphere,
+  showElevation,
+  setShowElevation
 }: {
   planet: keyof typeof PLANETS;
   showEnvironment: boolean;
   setShowEnvironment: (showEnvironment: boolean) => void;
   showAtmosphere: boolean;
   setShowAtmosphere: (showAtmosphere: boolean) => void;
+  showElevation: boolean;
+  setShowElevation: (showElevation: boolean) => void;
 }) => {
   const hasAtmosphere = planet === "Earth" || planet === "Venus";
+  const hasElevation = planet !== "Sun" && planet !== "Jupiter" && planet !== "Saturn" && planet !== "Uranus" && planet !== "Neptune";
   return (
     <FieldSet 
       label="Layers"
@@ -27,6 +32,13 @@ const LayerControls = ({
         type="checkbox"
         checked={showAtmosphere}
         onChange={() => setShowAtmosphere(!showAtmosphere)} />
+      <Control
+        modifier={[...(!hasElevation ? ["disabled"] : [])]}
+        disabled={!hasElevation}
+        label="Elevation"
+        type="checkbox"
+        checked={showElevation}
+        onChange={() => setShowElevation(!showElevation)} />
       <Control
         label="Background"
         type="checkbox"

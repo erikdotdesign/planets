@@ -56,6 +56,13 @@ const PlanetControls = ({
               type: "SET_SHOW_ATMOSPHERE",
               showAtmosphere
             })
+          }}
+          showElevation={planetState.showElevation}
+          setShowElevation={(showElevation: boolean) => {
+            planetStateDispatch({
+              type: "SET_SHOW_ELEVATION",
+              showElevation
+            })
           }} />
       </div>
       <div className="c-app__control-group c-app__control-group--row c-app__control-group--fixed">

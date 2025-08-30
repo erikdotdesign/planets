@@ -47,6 +47,10 @@ const usePlanetViewer = (
   }, [planetState.showAtmosphere]);
 
   useEffect(() => { 
+    viewerRef.current?.toggleElevation(planetState.showElevation); 
+  }, [planetState.showElevation]);
+
+  useEffect(() => { 
     viewerRef.current?.setLightMode(planetState.lightMode); 
   }, [planetState.lightMode]);
 

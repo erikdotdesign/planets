@@ -61,6 +61,7 @@ export class PlanetViewer {
   private rotationSpeed = 0.5;
   private showEnvironment = true;
   private showAtmosphere = true;
+  private showElevation = true;
   private currentRotationDirection: "prograde" | "retrograde" | "synchronous" = "prograde";
 
   private lightGroup = new THREE.Group();
@@ -180,6 +181,21 @@ export class PlanetViewer {
     if (this.atmosphere) this.atmosphere.visible = show;
   }
 
+  toggleElevation(enabled: boolean) {
+    this.showElevation = enabled;
+
+    // Update existing sphere if it’s using a bump map
+    if (this.sphere) {
+      const mat = this.sphere.material as THREE.MeshPhongMaterial;
+      if (mat.bumpMap) {
+        // Use radius stored in userData or fallback to 1
+        const r = (this.sphere.userData.radius as number) ?? 1;
+        mat.bumpScale = enabled ? r / 350 : 0;
+        mat.needsUpdate = true;
+      }
+    }
+  }
+
   toggleTilt(enabled: boolean) {
     this.tiltEnabled = enabled;
     if (!this.sphere) return;
@@ -269,13 +285,14 @@ export class PlanetViewer {
       mat = new THREE.MeshPhongMaterial({
         map: baseTex,
         bumpMap: bumpTex,
-        bumpScale: bumpTex ? radius / 350 : 0,
+        bumpScale: bumpTex && this.showElevation ? radius / 350 : 0,
         specularMap: specTex,
         shininess: specTex ? 5 : 0,
       });
     }
 
     this.sphere = new THREE.Mesh(geom, mat);
+    this.sphere.userData.radius = radius;
     this.baseTilt = this.degreesToRadians(tilt);
     this.sphere.rotation.x = this.tiltEnabled ? this.baseTilt * -1 : 0;
     this.scene.add(this.sphere);
