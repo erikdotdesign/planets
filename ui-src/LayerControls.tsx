@@ -26,12 +26,10 @@ const LayerControls = ({
       label="Layers"
       spaceDecor>
       <Control
-        modifier={[...(!hasAtmosphere ? ["disabled"] : [])]}
-        disabled={!hasAtmosphere}
-        label="Atmosphere"
+        label="Background"
         type="checkbox"
-        checked={showAtmosphere}
-        onChange={() => setShowAtmosphere(!showAtmosphere)} />
+        checked={showEnvironment}
+        onChange={() => setShowEnvironment(!showEnvironment)} />
       <Control
         modifier={[...(!hasElevation ? ["disabled"] : [])]}
         disabled={!hasElevation}
@@ -40,10 +38,12 @@ const LayerControls = ({
         checked={showElevation}
         onChange={() => setShowElevation(!showElevation)} />
       <Control
-        label="Background"
+        modifier={[...(!hasAtmosphere ? ["disabled"] : [])]}
+        disabled={!hasAtmosphere}
+        label="Atmosphere"
         type="checkbox"
-        checked={showEnvironment}
-        onChange={() => setShowEnvironment(!showEnvironment)} />
+        checked={showAtmosphere}
+        onChange={() => setShowAtmosphere(!showAtmosphere)} />
     </FieldSet>
   );
 };
