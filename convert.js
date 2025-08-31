@@ -1,4 +1,3 @@
-// utility to convert textures to webp
 const fs = require("fs");
 const sharp = require("sharp");
 
@@ -11,15 +10,15 @@ for (const inputDir of inputDirs) {
   const files = fs.readdirSync(inputDir);
 
   for (const file of files) {
-    if (!/\.(jpg|jpeg|png)$/i.test(file)) continue;
+    if (!/-bump\.webp$/i.test(file)) continue; // only process bump maps
 
     const inputPath = `${inputDir}/${file}`;
-    const outputPath = `${inputDir}/${file.replace(/\.(jpg|jpeg|png)$/i, ".webp")}`;
+    const outputPath = `${inputDir}/1x-${file}`; // overwrite in place
 
     sharp(inputPath)
-      .webp({ quality: 80 })
+      .resize(1024, 512, { fit: "fill" }) // force exact 1024x512
       .toFile(outputPath)
-      .then(() => console.log(`✅ Converted: ${file} → ${outputPath}`))
-      .catch(err => console.error(`❌ Error converting ${file}:`, err));
+      .then(() => console.log(`✅ Resized: ${file} → 1024x512`))
+      .catch(err => console.error(`❌ Error resizing ${file}:`, err));
   }
 }
