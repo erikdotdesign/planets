@@ -5,12 +5,12 @@ import { EffectComposer, EffectPass, RenderPass, SelectiveBloomEffect } from "po
 import { TextureMap, PLANETS } from "./planets";
 
 // Environment textures
-import envNx from "./textures/environment/nx.png";
-import envNy from "./textures/environment/ny.png";
-import envNz from "./textures/environment/nz.png";
-import envPx from "./textures/environment/px.png";
-import envPy from "./textures/environment/py.png";
-import envPz from "./textures/environment/pz.png";
+import envNx from "./textures/environment/nx.webp";
+import envNy from "./textures/environment/ny.webp";
+import envNz from "./textures/environment/nz.webp";
+import envPx from "./textures/environment/px.webp";
+import envPy from "./textures/environment/py.webp";
+import envPz from "./textures/environment/pz.webp";
 
 const ENVIRONMENT_TEXTURES = [envPx, envNx, envPy, envNy, envPz, envNz];
 const CAMERA_FOV = 45;

@@ -1,65 +1,65 @@
 // === Imports ===
-import sun from "./textures/sun.jpg";
+import sun from "./textures/sun.webp";
 
-import mercury from "./textures/mercury.jpg";
-import mercuryBump from "./textures/mercury-bump.jpg";
+import mercury from "./textures/mercury.webp";
+import mercuryBump from "./textures/mercury-bump.webp";
 
-import venus from "./textures/venus.jpg";
-import venusClouds from "./textures/venus-clouds.jpg";
-import venusBump from "./textures/venus-bump.jpg";
+import venus from "./textures/venus.webp";
+import venusClouds from "./textures/venus-clouds.webp";
+import venusBump from "./textures/venus-bump.webp";
 
-import earth from "./textures/earth.jpg";
-import earthBump from "./textures/earth-bump.jpg";
-import earthSpec from "./textures/earth-specular.jpg";
-import earthClouds from "./textures/earth-clouds.png";
-import earthCloudsAlpha from "./textures/earth-clouds-alpha.jpg";
+import earth from "./textures/earth.webp";
+import earthBump from "./textures/earth-bump.webp";
+import earthSpec from "./textures/earth-specular.webp";
+import earthClouds from "./textures/earth-clouds.webp";
+import earthCloudsAlpha from "./textures/earth-clouds-alpha.webp";
 
-import moon from "./textures/moon.jpg";
-import moonBump from "./textures/moon-bump.jpg";
+import moon from "./textures/moon.webp";
+import moonBump from "./textures/moon-bump.webp";
 
-import mars from "./textures/mars.jpg";
-import marsBump from "./textures/mars-bump.jpg";
+import mars from "./textures/mars.webp";
+import marsBump from "./textures/mars-bump.webp";
 
-import jupiter from "./textures/jupiter.jpg";
+import jupiter from "./textures/jupiter.webp";
 
-import saturn from "./textures/saturn.jpg";
-import saturnRing from "./textures/saturn-ring.png";
+import saturn from "./textures/saturn.webp";
+import saturnRing from "./textures/saturn-ring.webp";
 
-import uranus from "./textures/uranus.jpg";
-import neptune from "./textures/neptune.jpg";
+import uranus from "./textures/uranus.webp";
+import neptune from "./textures/neptune.webp";
 
-import pluto from "./textures/pluto.jpg";
-import plutoBump from "./textures/pluto-bump.jpg";
+import pluto from "./textures/pluto.webp";
+import plutoBump from "./textures/pluto-bump.webp";
 
-import ganymede from "./textures/ganymede.jpg";
-import ganymedeBump from "./textures/ganymede-bump.jpg";
+import ganymede from "./textures/ganymede.webp";
+import ganymedeBump from "./textures/ganymede-bump.webp";
 
 import titan from "./textures/titan.webp";
-import titanBump from "./textures/titan-bump.jpg";
+import titanBump from "./textures/titan-bump.webp";
 
-import callisto from "./textures/callisto.jpg";
-import callistoBump from "./textures/callisto-bump.jpg";
+import callisto from "./textures/callisto.webp";
+import callistoBump from "./textures/callisto-bump.webp";
 
-import io from "./textures/io.jpg";
-import ioBump from "./textures/io-bump.jpg";
+import io from "./textures/io.webp";
+import ioBump from "./textures/io-bump.webp";
 
-import europa from "./textures/europa.jpg";
-import europaBump from "./textures/europa-bump.jpg";
+import europa from "./textures/europa.webp";
+import europaBump from "./textures/europa-bump.webp";
 
-import triton from "./textures/triton.jpg";
-import tritonBump from "./textures/triton-bump.jpg";
+import triton from "./textures/triton.webp";
+import tritonBump from "./textures/triton-bump.webp";
 
-import ceres from "./textures/ceres.jpg";
-import ceresBump from "./textures/ceres-bump.jpg";
+import ceres from "./textures/ceres.webp";
+import ceresBump from "./textures/ceres-bump.webp";
 
-import haumea from "./textures/haumea.jpg";
-import haumeaBump from "./textures/haumea-bump.jpg";
+import haumea from "./textures/haumea.webp";
+import haumeaBump from "./textures/haumea-bump.webp";
 
-import makemake from "./textures/makemake.jpg";
-import makemakeBump from "./textures/makemake-bump.jpg";
+import makemake from "./textures/makemake.webp";
+import makemakeBump from "./textures/makemake-bump.webp";
 
-import eris from "./textures/eris.jpg";
-import erisBump from "./textures/eris-bump.jpg";
+import eris from "./textures/eris.webp";
+import erisBump from "./textures/eris-bump.webp";
 
 // === Types ===
 export type PlanetryObject = "star" | "planet" | "dwarf-planet" | "moon";
