@@ -75,6 +75,7 @@ export class PlanetViewer {
       environment = true,
       controls = true,
       atmosphere = true,
+      onZoomChange
     } = opts;
 
     this.renderer = new THREE.WebGLRenderer({
@@ -87,7 +88,7 @@ export class PlanetViewer {
     this.renderer.setSize(width, height, false);
 
     this.initCamera(width, height);
-    if (controls && !headless) this.initControls();
+    if (controls && !headless) this.initControls(onZoomChange);
     if (environment) this.createEnvironment();
     this.showAtmosphere = atmosphere;
 
@@ -105,7 +106,7 @@ export class PlanetViewer {
     this.camera.lookAt(0, 0, 0);
   }
 
-  private initControls() {
+  private initControls(onZoomChange?: (zoom: number) => void) {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.1;
@@ -113,6 +114,13 @@ export class PlanetViewer {
     this.controls.enableZoom = true;
     this.controls.minDistance = 1.5;
     this.controls.maxDistance = 10;
+    
+    if (onZoomChange) {
+      this.controls.addEventListener("change", () => {
+        const zoom = this.camera.position.distanceTo(this.controls!.target);
+        onZoomChange(zoom);
+      });
+    }
   }
 
   private initResizeObserver(host: HTMLCanvasElement) {
@@ -124,6 +132,13 @@ export class PlanetViewer {
       this.composer?.setSize(w, h);
     };
     new ResizeObserver(onResize).observe(host);
+  }
+
+  setZoomLevel(distance: number) {
+    const dir = new THREE.Vector3();
+    this.camera.getWorldDirection(dir);
+    this.camera.position.copy(dir.multiplyScalar(-distance));
+    this.camera.updateProjectionMatrix();
   }
 
   private initComposer(width: number, height: number) {
