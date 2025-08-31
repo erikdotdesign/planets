@@ -3,6 +3,8 @@
 Animated **3D renders** of the Sun, planets, dwarf planets, and moons — right inside Figma.  
 Export still images or looping videos of celestial objects with full control over **lighting, rotation, and layers**.  
 
+![cover](planets-cover.png) 
+
 ## Features  
 
 - **21 celestial models** included:  
