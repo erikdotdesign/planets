@@ -1,7 +1,7 @@
 # Planets — Figma Plugin  
 
-Animated **3D renders** of the Sun, planets, and moons — right inside Figma.  
-Export still images or looping videos of celestial objects with full control over **lighting, rotation, and background**.  
+Animated **3D renders** of the Sun, planets, dwarf planets, and moons — right inside Figma.  
+Export still images or looping videos of celestial objects with full control over **lighting, rotation, and layers**.  
 
 ## Features  
 
@@ -10,8 +10,8 @@ Export still images or looping videos of celestial objects with full control ove
 
 - **Controls for realism & style**  
   - Lighting intensity & direction  
-  - Planetary rotation speed  
-  - Solid, gradient, or space backgrounds  
+  - Planetary rotation speed and tilt
+  - Background, elevation, and atmosphere toggles
 
 - **Export options**  
   - 1200×1200 still images (`.png`)  
@@ -33,10 +33,10 @@ Export still images or looping videos of celestial objects with full control ove
 
 ## Controls  
 
-- **Object:** Pick a planet, moon, or the sun  
+- **Object:** Pick a planet, dwarf planet, moon, or the sun  
 - **Lighting:** Adjust intensity, position, and shadow detail  
-- **Rotation:** Static or animated spin  
-- **Background:** Transparent or starfield  
+- **Rotation:** Static or animated spin, with or without tilt
+- **Layers:** Transparent or starfield background, plus optional elevation and atmosphere
 
 ## Exports  
 
