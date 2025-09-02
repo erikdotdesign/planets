@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { PlanetViewer } from "./planetViewer";
 
 export type Recorder = {
   recording: boolean;
@@ -9,7 +10,11 @@ export type Recorder = {
   videoUrl: string | null;
 };
 
-const useRecorder = (canvasRef: React.RefObject<HTMLCanvasElement>, planet: string): Recorder => {
+const useRecorder = (
+  canvasRef: React.RefObject<HTMLCanvasElement>, 
+  viewerRef: React.RefObject<PlanetViewer>,
+  planet: string
+): Recorder => {
   const recorderRef = useRef<MediaRecorder | null>(null);
   const recordedChunksRef = useRef<BlobPart[]>([]);
   const stillImageDataUrl = useRef<string>("");
@@ -66,9 +71,9 @@ const useRecorder = (canvasRef: React.RefObject<HTMLCanvasElement>, planet: stri
       recorderRef.current.stop();
     });
 
-  const snapshot = () => {
+  const snapshot = async () => {
     if (!canvasRef.current) return;
-    const img = canvasRef.current.toDataURL("image/png");
+    const img = await viewerRef.current?.renderOnce();
     parent.postMessage({ pluginMessage: { 
       type: "add-planet-image", 
       image: img, 

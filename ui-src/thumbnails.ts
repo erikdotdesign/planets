@@ -21,7 +21,7 @@ export const generatePlanetThumbnails = async () => {
       tilt: planet.tilt
     });
 
-    const image = await viewer.renderOnce();
+    const image = await viewer.renderOnce(true);
     previews.push({ name, image });
   }
 

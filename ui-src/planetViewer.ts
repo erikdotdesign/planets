@@ -378,10 +378,12 @@ export class PlanetViewer {
     this.rotationSpeed = 0;
   }
 
-  async renderOnce(): Promise<string> {
-    return new Promise((resolve) => {
+  async renderOnce(headless = false): Promise<string> {
+    if (headless) {
+      this.composer?.render();
+    }
+    return new Promise(resolve => {
       requestAnimationFrame(() => {
-        this.composer?.render();
         resolve(this.renderer.domElement.toDataURL("image/png"));
       });
     });

@@ -25,7 +25,7 @@ const App = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const buttonRefs = useRef<Record<keyof typeof PLANETS, HTMLButtonElement | null>>({} as any);
   const viewerRef = usePlanetViewer(canvasRef, planetState, planetStateDispatch);
-  const recorderRef = useRecorder(canvasRef, planetState.planet);
+  const recorderRef = useRecorder(canvasRef, viewerRef, planetState.planet);
 
   usePluginStorage(
     planetState, 
